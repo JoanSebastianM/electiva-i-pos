@@ -4,3 +4,4 @@ dist/
 backend/data/
 *.log
 .DS_Store
+~$*.docx
