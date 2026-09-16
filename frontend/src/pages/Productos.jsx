@@ -12,6 +12,7 @@ export default function Productos() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [order, setOrder] = useState('name');
 
   useEffect(() => {
     api.categories
