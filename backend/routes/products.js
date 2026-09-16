@@ -11,14 +11,24 @@ const listSql = `
 
 // Listar productos (con el nombre de su categoria)
 router.get('/', (req, res) => {
-  const { search } = req.query;
+  const { search, order } = req.query;
+
+  let orderSql = 'ORDER BY p.name';
+
+  if (order === 'price_asc') {
+    orderSql = 'ORDER BY p.price ASC';
+  } else if (order === 'price_desc') {
+    orderSql = 'ORDER BY p.price DESC';
+  }
+
   if (search) {
     const rows = getDb()
-      .prepare(`${listSql} WHERE p.name LIKE ? ORDER BY p.name`)
+      .prepare(`${listSql} WHERE p.name LIKE ? ${orderSql}`)
       .all(`%${search}%`);
     return res.json(rows);
   }
-  res.json(getDb().prepare(`${listSql} ORDER BY p.name`).all());
+
+  res.json(getDb().prepare(`${listSql} ${orderSql}`).all());
 });
 
 // Obtener un producto por id
