@@ -26,6 +26,12 @@ export default function Ventas() {
     if (!productId) return setError('Debes indicar el producto');
     if (!Number.isInteger(Number(quantity)) || Number(quantity) < 1)
       return setError('La cantidad debe ser un entero mayor o igual a 1');
+    if (!selected)
+      return setError('El producto seleccionado no existe');
+    const confirmed = confirm(
+      `Confirmar venta\nProducto: ${selected.name}\nCantidad: ${quantity}\nTotal: ${formatMoney(total)}`
+    );
+    if (!confirmed) return;
     try {
       await save({ productId: Number(productId), quantity: Number(quantity) });
       setProductId('');
@@ -71,6 +77,7 @@ export default function Ventas() {
             <input
               type="number"
               min="1"
+              step="1"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             />
