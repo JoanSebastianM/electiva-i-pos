@@ -120,6 +120,19 @@ test('Ventas: validacion de cantidad', async () => {
   assert.equal(res.status, 400);
 });
 
+test('Ventas: rechaza cantidad mayor al stock disponible', async () => {
+  const products = await request(app).get('/api/products').then((r) => r.body);
+  const product = products[0];
+  const qty = product.stock + 1;
+
+  const res = await request(app).post('/api/sales').send({ productId: product.id, quantity: qty });
+  assert.equal(res.status, 400);
+  assert.match(res.body.error, /Stock insuficiente/);
+
+  const one = await request(app).post('/api/sales').send({ productId: product.id, quantity: product.stock });
+  assert.equal(one.status, 201);
+});
+
 test('Ruta inexistente responde 404', async () => {
   const res = await request(app).get('/api/no-existe');
   assert.equal(res.status, 404);
