@@ -17,7 +17,7 @@ Backend en **Node.js + Express + SQLite** y frontend en **React + Vite** conecta
 - [x] Base de datos **SQLite** con tablas relacionadas (FK)
 - [x] **5 funcionalidades CRUD** completas: Productos, Categorías, Ingredientes, Clientes y Ventas
 - [x] Frontend conectado al backend (fetch + API REST)
-- [x] **Pruebas automatizadas** (`node --test` + supertest): 9 pruebas, todas pasando
+- [x] **Pruebas automatizadas** (`node --test` + supertest): 10 pruebas, todas pasando
 - [x] **Git/GitHub** con ramas por integrante (`feature/nicolas-productos`, `feature/joan-ventas`)
 - [x] **Documentación**: este README, `docs/TEST-CASES.md` y `docs/CONTRIBUCION-GIT.md`
 
@@ -89,7 +89,7 @@ cd backend
 npm test
 ```
 
-Salida esperada: `tests 9 · pass 9 · fail 0`.
+Salida esperada: `tests 10 · pass 10 · fail 0`.
 
 ## Endpoints (API REST)
 
