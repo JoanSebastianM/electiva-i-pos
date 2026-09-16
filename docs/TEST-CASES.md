@@ -69,11 +69,3 @@ Leyenda: `OK` = se comporta como se espera · `FALLO` = no coincide con lo esper
 | V7 | Confirmacion      | Registrar una venta valida     | Aparece el mensaje "Confirmar venta" con producto, cantidad y total; al aceptar se guarda, al cancelar no | ok |
 | V8 | Stock insuficiente| Registrar 21 uds de un producto con stock 20 | Error "Stock insuficiente: solo hay 20 unidades de ..." | ok |
 
-
-
-## Evidencia (para Google Drive)
-
-1. **Video 1 — CRUD basico (2-3 min):** entrar, listar, crear/editar/eliminar en Productos y Categorias.
-2. **Video 2 — Resto de modulos (2-3 min):** Ingredientes, Clientes y Ventas (mostrar que el total se calcula).
-3. **Capturas:** `npm test` pasando (10/10), una del navegador con cada modulo, y una del repositorio en GitHub con las ramas.
-4. Nombrar los archivos como `EVIDENCIA_1_nombre_integrante.jpg` etc., y subir a la carpeta compartida.
