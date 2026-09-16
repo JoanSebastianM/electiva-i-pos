@@ -34,10 +34,16 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: 'La cantidad debe ser un entero mayor o igual a 1' });
   }
 
-  const product = db.prepare('SELECT id, name, price FROM Product WHERE id = ?').get(Number(productId));
+  const product = db.prepare('SELECT id, name, price, stock FROM Product WHERE id = ?').get(Number(productId));
   if (!product) return res.status(400).json({ error: 'El producto no existe' });
 
   const qty = Number(quantity);
+  if (qty > product.stock) {
+    return res.status(400).json({
+      error: `Stock insuficiente: solo hay ${product.stock} unidades de "${product.name}"`
+    });
+  }
+
   const unitPrice = Number(product.price);
   const total = qty * unitPrice;
 
