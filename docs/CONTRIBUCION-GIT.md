@@ -75,13 +75,15 @@ Si hay conflictos, se resuelven dejando ambas funcionalidades y se hace commit c
 
 ## Subir a GitHub
 
+El repositorio ya esta creado en GitHub: **https://github.com/JoanSebastianM/electiva-i-pos**
+(dueño: Joan; Nicolas ya esta agregado como colaborador).
+
 ```bash
-# en GitHub: New repository -> universal-embriagados (privado o publico)
-git remote add origin https://github.com/UsuarioGit/universal-embriagados.git
-git branch -M main
-git push -u origin main
-git push -u origin feature/nicolas-productos
-git push -u origin feature/joan-ventas
+# clonar por HTTPS (pedira usuario y token):
+git clone https://github.com/JoanSebastianM/electiva-i-pos.git
+
+# para pushear, usar un token (por HTTPS): usuario = tu usuario de GitHub,
+# "password" = el Personal Access Token (scopes: repo)
 ```
 
 Desde GitHub se pueden crear **Pull Requests** de cada rama contra `main` para que el otro
