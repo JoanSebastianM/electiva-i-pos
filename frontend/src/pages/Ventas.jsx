@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useCrud } from '../hooks/useCrud';
 import { api, formatMoney } from '../api';
+import Tabla from '../components/Tabla';
+import Formulario, { Campo, FilaCampos } from '../components/Formulario';
 
 export default function Ventas() {
   const { rows, loading, error, save, remove, setError } = useCrud(api.sales);
   const [products, setProducts] = useState([]);
   const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState('1');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     api.products
@@ -33,11 +36,16 @@ export default function Ventas() {
     );
     if (!confirmed) return;
     try {
+      setSaving(true);
       await save({ productId: Number(productId), quantity: Number(quantity) });
       setProductId('');
       setQuantity('1');
+      const updatedProducts = await api.products.list();
+      setProducts(updatedProducts);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -45,60 +53,81 @@ export default function Ventas() {
     if (!confirm(`¿Eliminar la venta #${sale.id}?`)) return;
     try {
       await remove(sale.id);
+      const updatedProducts = await api.products.list();
+      setProducts(updatedProducts);
     } catch (err) {
       setError(err.message);
     }
   };
 
+  const columns = [
+    { key: 'id', header: 'ID', cellClassName: 'muted' },
+    { key: 'productName', header: 'Producto' },
+    { key: 'quantity', header: 'Cant.', className: 'right' },
+    { key: 'unitPrice', header: 'P. unit.', className: 'right', render: (s) => formatMoney(s.unitPrice) },
+    { key: 'total', header: 'Total', className: 'right', render: (s) => formatMoney(s.total) },
+    { key: 'createdAt', header: 'Fecha', cellClassName: 'muted' },
+    {
+      key: 'actions',
+      header: '',
+      render: (s) => (
+        <div className="btn-row">
+          <button className="btn btn-sm btn-danger" onClick={() => onDelete(s)}>
+            Eliminar
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="panel">
       <h2>Ventas</h2>
       <p className="sub">
-        Registra una venta: el total se calcula con el precio del producto.
+        Registra una venta: el total se calcula con el precio del producto y el stock se actualiza.
       </p>
 
       {error && <div className="error-msg">{error}</div>}
 
-      <form onSubmit={submit} className="panel" style={{ marginBottom: 22 }}>
-        <div className="field-row">
-          <div className="field">
-            <label>Producto *</label>
-            <select value={productId} onChange={(e) => setProductId(e.target.value)}>
-              <option value="">Selecciona un producto...</option>
-              {products.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name} - {formatMoney(p.price)}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="field">
-            <label>Cantidad *</label>
-            <input
-              type="number"
-              min="1"
-              step="1"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-            />
-          </div>
-        </div>
+      <div className="panel" style={{ marginBottom: 22 }}>
+        <Formulario
+          onSubmit={submit}
+          submitLabel="Registrar venta"
+          submitStyle={{ width: '100%' }}
+          saving={saving}
+        >
+          <FilaCampos>
+            <Campo label="Producto *">
+              <select value={productId} onChange={(e) => setProductId(e.target.value)}>
+                <option value="">Selecciona un producto...</option>
+                {products.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} - {formatMoney(p.price)} (stock: {p.stock})
+                  </option>
+                ))}
+              </select>
+            </Campo>
+            <Campo label="Cantidad *">
+              <input
+                type="number"
+                min="1"
+                step="1"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+              />
+            </Campo>
+          </FilaCampos>
 
-        <div className="field-row" style={{ alignItems: 'center' }}>
-          <div className="muted" style={{ fontSize: 13 }}>
-            Precio unitario: <strong style={{ color: 'var(--text)' }}>{formatMoney(unitPrice)}</strong>
+          <div className="field-row" style={{ alignItems: 'center' }}>
+            <div className="muted" style={{ fontSize: 13 }}>
+              Precio unitario: <strong style={{ color: 'var(--text)' }}>{formatMoney(unitPrice)}</strong>
+            </div>
+            <div className="right">
+              <span className="total-ventas">Total: {formatMoney(total)}</span>
+            </div>
           </div>
-          <div className="right">
-            <span className="total-ventas">Total: {formatMoney(total)}</span>
-          </div>
-        </div>
-
-        <div className="modal-actions">
-          <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-            Registrar venta
-          </button>
-        </div>
-      </form>
+        </Formulario>
+      </div>
 
       <div className="toolbar">
         <span className="muted">
@@ -109,54 +138,7 @@ export default function Ventas() {
         </span>
       </div>
 
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Producto</th>
-              <th className="right">Cant.</th>
-              <th className="right">P. unit.</th>
-              <th className="right">Total</th>
-              <th>Fecha</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={7} className="empty">
-                  Cargando...
-                </td>
-              </tr>
-            ) : rows.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="empty">
-                  Aun no hay ventas registradas
-                </td>
-              </tr>
-            ) : (
-              rows.map((s) => (
-                <tr key={s.id}>
-                  <td className="muted">{s.id}</td>
-                  <td>{s.productName}</td>
-                  <td className="right">{s.quantity}</td>
-                  <td className="right">{formatMoney(s.unitPrice)}</td>
-                  <td className="right">{formatMoney(s.total)}</td>
-                  <td className="muted">{s.createdAt}</td>
-                  <td>
-                    <div className="btn-row">
-                      <button className="btn btn-sm btn-danger" onClick={() => onDelete(s)}>
-                        Eliminar
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Tabla columns={columns} rows={rows} loading={loading} empty="Aun no hay ventas registradas" />
     </div>
   );
 }

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useCrud } from '../hooks/useCrud';
 import { api } from '../api';
 import Modal from '../components/Modal';
+import Tabla from '../components/Tabla';
+import Formulario, { Campo, FilaCampos } from '../components/Formulario';
 
 export default function Ingredientes() {
   const { rows, loading, error, save, remove, setError } = useCrud(api.ingredients);
@@ -48,6 +50,27 @@ export default function Ingredientes() {
     }
   };
 
+  const columns = [
+    { key: 'id', header: 'ID', cellClassName: 'muted' },
+    { key: 'name', header: 'Nombre' },
+    { key: 'unit', header: 'Unidad' },
+    { key: 'stock', header: 'Stock', className: 'right' },
+    {
+      key: 'actions',
+      header: '',
+      render: (i) => (
+        <div className="btn-row">
+          <button className="btn btn-sm" onClick={() => openEdit(i)}>
+            Editar
+          </button>
+          <button className="btn btn-sm btn-danger" onClick={() => onDelete(i)}>
+            Eliminar
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="panel">
       <h2>Ingredientes</h2>
@@ -62,98 +85,46 @@ export default function Ingredientes() {
         </button>
       </div>
 
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Unidad</th>
-              <th className="right">Stock</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={5} className="empty">
-                  Cargando...
-                </td>
-              </tr>
-            ) : rows.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="empty">
-                  No hay ingredientes
-                </td>
-              </tr>
-            ) : (
-              rows.map((i) => (
-                <tr key={i.id}>
-                  <td className="muted">{i.id}</td>
-                  <td>{i.name}</td>
-                  <td>{i.unit}</td>
-                  <td className="right">{i.stock}</td>
-                  <td>
-                    <div className="btn-row">
-                      <button className="btn btn-sm" onClick={() => openEdit(i)}>
-                        Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger" onClick={() => onDelete(i)}>
-                        Eliminar
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Tabla columns={columns} rows={rows} loading={loading} empty="No hay ingredientes" />
 
       {open && (
         <Modal
           title={editing ? `Editar: ${editing.name}` : 'Nuevo ingrediente'}
           onClose={() => setOpen(false)}
         >
-          <form onSubmit={submit}>
-            <div className="field">
-              <label>Nombre *</label>
+          <Formulario
+            onSubmit={submit}
+            onCancel={() => setOpen(false)}
+            saving={saving}
+            submitLabel={editing ? 'Guardar cambios' : 'Crear ingrediente'}
+          >
+            <Campo label="Nombre *">
               <input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="Ej: Jarabe de Maracuya"
                 autoFocus
               />
-            </div>
-            <div className="field-row">
-              <div className="field">
-                <label>Unidad</label>
+            </Campo>
+            <FilaCampos>
+              <Campo label="Unidad">
                 <select value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })}>
                   <option value="ml">ml</option>
                   <option value="g">g</option>
                   <option value="kg">kg</option>
                   <option value="unidad">unidad</option>
                 </select>
-              </div>
-              <div className="field">
-                <label>Stock</label>
+              </Campo>
+              <Campo label="Stock">
                 <input
                   type="number"
                   min="0"
                   value={form.stock}
                   onChange={(e) => setForm({ ...form, stock: e.target.value })}
                 />
-              </div>
-            </div>
-            <div className="modal-actions">
-              <button type="button" className="btn" onClick={() => setOpen(false)}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={saving}>
-                {saving ? 'Guardando...' : editing ? 'Guardar cambios' : 'Crear ingrediente'}
-              </button>
-            </div>
-          </form>
+              </Campo>
+            </FilaCampos>
+          </Formulario>
         </Modal>
       )}
     </div>

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useCrud } from '../hooks/useCrud';
 import { api, formatMoney } from '../api';
 import Modal from '../components/Modal';
+import Tabla from '../components/Tabla';
+import Formulario, { Campo, FilaCampos } from '../components/Formulario';
 
 const emptyForm = { name: '', price: '', stock: '', categoryId: '' };
 
@@ -65,6 +67,37 @@ export default function Productos() {
     }
   };
 
+  const columns = [
+    { key: 'id', header: 'ID', cellClassName: 'muted' },
+    { key: 'name', header: 'Nombre' },
+    {
+      key: 'categoryName',
+      header: 'Categoria',
+      render: (p) =>
+        p.categoryName ? (
+          <span className="badge-pill">{p.categoryName}</span>
+        ) : (
+          <span className="muted">-</span>
+        )
+    },
+    { key: 'price', header: 'Precio', className: 'right', render: (p) => formatMoney(p.price) },
+    { key: 'stock', header: 'Stock', className: 'right' },
+    {
+      key: 'actions',
+      header: '',
+      render: (p) => (
+        <div className="btn-row">
+          <button className="btn btn-sm" onClick={() => openEdit(p)}>
+            Editar
+          </button>
+          <button className="btn btn-sm btn-danger" onClick={() => onDelete(p)}>
+            Eliminar
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="panel">
       <h2>Productos</h2>
@@ -84,91 +117,47 @@ export default function Productos() {
         </button>
       </div>
 
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Categoria</th>
-              <th className="right">Precio</th>
-              <th className="right">Stock</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={6} className="empty">
-                  Cargando...
-                </td>
-              </tr>
-            ) : rows.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="empty">
-                  No hay productos
-                </td>
-              </tr>
-            ) : (
-              rows.map((p) => (
-                <tr key={p.id}>
-                  <td className="muted">{p.id}</td>
-                  <td>{p.name}</td>
-                  <td>{p.categoryName ? <span className="badge-pill">{p.categoryName}</span> : <span className="muted">-</span>}</td>
-                  <td className="right">{formatMoney(p.price)}</td>
-                  <td className="right">{p.stock}</td>
-                  <td>
-                    <div className="btn-row">
-                      <button className="btn btn-sm" onClick={() => openEdit(p)}>
-                        Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger" onClick={() => onDelete(p)}>
-                        Eliminar
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Tabla columns={columns} rows={rows} loading={loading} empty="No hay productos" />
 
       {open && (
         <Modal title={editing ? `Editar: ${editing.name}` : 'Nuevo producto'} onClose={() => setOpen(false)}>
-          <form onSubmit={submit}>
-            <div className="field">
-              <label>Nombre *</label>
+          <Formulario
+            onSubmit={submit}
+            onCancel={() => setOpen(false)}
+            saving={saving}
+            submitLabel={editing ? 'Guardar cambios' : 'Crear producto'}
+          >
+            <Campo label="Nombre *">
               <input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="Ej: Granizado Maracuya"
                 autoFocus
               />
-            </div>
-            <div className="field-row">
-              <div className="field">
-                <label>Precio *</label>
+            </Campo>
+            <FilaCampos>
+              <Campo label="Precio *">
                 <input
                   type="number"
                   min="0"
                   value={form.price}
                   onChange={(e) => setForm({ ...form, price: e.target.value })}
                 />
-              </div>
-              <div className="field">
-                <label>Stock</label>
+              </Campo>
+              <Campo label="Stock">
                 <input
                   type="number"
                   min="0"
                   value={form.stock}
                   onChange={(e) => setForm({ ...form, stock: e.target.value })}
                 />
-              </div>
-            </div>
-            <div className="field">
-              <label>Categoria</label>
-              <select value={form.categoryId} onChange={(e) => setForm({ ...form, categoryId: e.target.value })}>
+              </Campo>
+            </FilaCampos>
+            <Campo label="Categoria">
+              <select
+                value={form.categoryId}
+                onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
+              >
                 <option value="">Sin categoria</option>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -176,16 +165,8 @@ export default function Productos() {
                   </option>
                 ))}
               </select>
-            </div>
-            <div className="modal-actions">
-              <button type="button" className="btn" onClick={() => setOpen(false)}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={saving}>
-                {saving ? 'Guardando...' : editing ? 'Guardar cambios' : 'Crear producto'}
-              </button>
-            </div>
-          </form>
+            </Campo>
+          </Formulario>
         </Modal>
       )}
     </div>

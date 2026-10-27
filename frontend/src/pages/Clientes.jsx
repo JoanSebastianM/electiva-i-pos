@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useCrud } from '../hooks/useCrud';
 import { api } from '../api';
 import Modal from '../components/Modal';
+import Tabla from '../components/Tabla';
+import Formulario, { Campo } from '../components/Formulario';
 
 export default function Clientes() {
   const { rows, loading, error, save, remove, setError, search, setSearch } = useCrud(api.customers);
@@ -45,6 +47,30 @@ export default function Clientes() {
     }
   };
 
+  const columns = [
+    { key: 'id', header: 'ID', cellClassName: 'muted' },
+    { key: 'name', header: 'Nombre' },
+    {
+      key: 'phone',
+      header: 'Telefono',
+      render: (c) => c.phone || <span className="muted">-</span>
+    },
+    {
+      key: 'actions',
+      header: '',
+      render: (c) => (
+        <div className="btn-row">
+          <button className="btn btn-sm" onClick={() => openEdit(c)}>
+            Editar
+          </button>
+          <button className="btn btn-sm btn-danger" onClick={() => onDelete(c)}>
+            Eliminar
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="panel">
       <h2>Clientes</h2>
@@ -64,81 +90,32 @@ export default function Clientes() {
         </button>
       </div>
 
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Telefono</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={4} className="empty">
-                  Cargando...
-                </td>
-              </tr>
-            ) : rows.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="empty">
-                  No hay clientes
-                </td>
-              </tr>
-            ) : (
-              rows.map((c) => (
-                <tr key={c.id}>
-                  <td className="muted">{c.id}</td>
-                  <td>{c.name}</td>
-                  <td>{c.phone || <span className="muted">-</span>}</td>
-                  <td>
-                    <div className="btn-row">
-                      <button className="btn btn-sm" onClick={() => openEdit(c)}>
-                        Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger" onClick={() => onDelete(c)}>
-                        Eliminar
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Tabla columns={columns} rows={rows} loading={loading} empty="No hay clientes" />
 
       {open && (
         <Modal title={editing ? `Editar: ${editing.name}` : 'Nuevo cliente'} onClose={() => setOpen(false)}>
-          <form onSubmit={submit}>
-            <div className="field">
-              <label>Nombre *</label>
+          <Formulario
+            onSubmit={submit}
+            onCancel={() => setOpen(false)}
+            saving={saving}
+            submitLabel={editing ? 'Guardar cambios' : 'Crear cliente'}
+          >
+            <Campo label="Nombre *">
               <input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="Ej: Carlos Perez"
                 autoFocus
               />
-            </div>
-            <div className="field">
-              <label>Telefono</label>
+            </Campo>
+            <Campo label="Telefono">
               <input
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 placeholder="Ej: 3001234567"
               />
-            </div>
-            <div className="modal-actions">
-              <button type="button" className="btn" onClick={() => setOpen(false)}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={saving}>
-                {saving ? 'Guardando...' : editing ? 'Guardar cambios' : 'Crear cliente'}
-              </button>
-            </div>
-          </form>
+            </Campo>
+          </Formulario>
         </Modal>
       )}
     </div>

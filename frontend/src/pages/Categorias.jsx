@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useCrud } from '../hooks/useCrud';
 import { api } from '../api';
 import Modal from '../components/Modal';
+import Tabla from '../components/Tabla';
+import Formulario, { Campo } from '../components/Formulario';
 
 export default function Categorias() {
   const { rows, loading, error, save, remove, setError } = useCrud(api.categories);
@@ -45,6 +47,25 @@ export default function Categorias() {
     }
   };
 
+  const columns = [
+    { key: 'id', header: 'ID', cellClassName: 'muted' },
+    { key: 'name', header: 'Nombre' },
+    {
+      key: 'actions',
+      header: '',
+      render: (c) => (
+        <div className="btn-row">
+          <button className="btn btn-sm" onClick={() => openEdit(c)}>
+            Editar
+          </button>
+          <button className="btn btn-sm btn-danger" onClick={() => onDelete(c)}>
+            Eliminar
+          </button>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="panel">
       <h2>Categorias</h2>
@@ -59,71 +80,25 @@ export default function Categorias() {
         </button>
       </div>
 
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={3} className="empty">
-                  Cargando...
-                </td>
-              </tr>
-            ) : rows.length === 0 ? (
-              <tr>
-                <td colSpan={3} className="empty">
-                  No hay categorias
-                </td>
-              </tr>
-            ) : (
-              rows.map((c) => (
-                <tr key={c.id}>
-                  <td className="muted">{c.id}</td>
-                  <td>{c.name}</td>
-                  <td>
-                    <div className="btn-row">
-                      <button className="btn btn-sm" onClick={() => openEdit(c)}>
-                        Editar
-                      </button>
-                      <button className="btn btn-sm btn-danger" onClick={() => onDelete(c)}>
-                        Eliminar
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Tabla columns={columns} rows={rows} loading={loading} empty="No hay categorias" />
 
       {open && (
         <Modal title={editing ? `Editar: ${editing.name}` : 'Nueva categoria'} onClose={() => setOpen(false)}>
-          <form onSubmit={submit}>
-            <div className="field">
-              <label>Nombre *</label>
+          <Formulario
+            onSubmit={submit}
+            onCancel={() => setOpen(false)}
+            saving={saving}
+            submitLabel={editing ? 'Guardar cambios' : 'Crear categoria'}
+          >
+            <Campo label="Nombre *">
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Ej: Granizados"
                 autoFocus
               />
-            </div>
-            <div className="modal-actions">
-              <button type="button" className="btn" onClick={() => setOpen(false)}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={saving}>
-                {saving ? 'Guardando...' : editing ? 'Guardar cambios' : 'Crear categoria'}
-              </button>
-            </div>
-          </form>
+            </Campo>
+          </Formulario>
         </Modal>
       )}
     </div>
