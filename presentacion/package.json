@@ -1,0 +1,12 @@
+{
+  "name": "embriagados-presentacion",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node generar-presentacion.mjs"
+  },
+  "devDependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}
