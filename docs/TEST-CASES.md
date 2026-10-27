@@ -68,6 +68,9 @@ Leyenda: `OK` = se comporta como se espera · `FALLO` = no coincide con lo esper
 | V6 | Eliminar          | Eliminar la venta creada       | Desaparece y el acumulado baja            | Pendiente |
 | V7 | Confirmacion      | Registrar una venta valida     | Aparece el mensaje "Confirmar venta" con producto, cantidad y total; al aceptar se guarda, al cancelar no | Pendiente |
 | V8 | Stock insuficiente| Registrar 21 uds de un producto con stock 20 | Error "Stock insuficiente: solo hay 20 unidades de ..." | Pendiente |
+| V9 | Descuento de stock | Registrar una venta de 3 uds de un producto con stock 10 | La venta se crea y el producto queda con stock 7 | Pendiente |
+| V10 | Restauracion de stock | Eliminar la venta creada en V9 | La venta desaparece y el producto vuelve a stock 10 | Pendiente |
+| V11 | Venta invalida sin cambios | Intentar vender 5 uds de un producto con stock 4 | Error de stock insuficiente y el producto conserva stock 4 | Pendiente |
 
 > Pendiente: cuando Nicolas termine su rama, agregar el caso **P9 Ordenar** en la tabla de Productos
 > (selector "Precio (menor)" / "Precio (mayor)").

@@ -60,6 +60,35 @@ git commit -m "feat(ventas): validar stock disponible al registrar"
 git commit -m "feat(ventas): confirmar resumen de venta y control de cantidad"
 ```
 
+## Rama de arquitectura: `feature/arquitectura-capas`
+
+Tarea: alinear el codigo con el **diagrama de arquitectura por capas** y preparar la
+presentacion del proyecto.
+
+Cambios principales:
+
+1. **Backend**: agregar `backend/repositories/` (contrato, base SQLite y repositorios
+   concretos) y `backend/services/` (servicios por entidad, `SaleService` e
+   `InventoryService`).
+2. **Ventas**: descontar stock al registrar una venta y restaurarlo al eliminarla, dentro de
+   una transaccion.
+3. **Frontend**: extraer `Navbar.jsx`, `Tabla.jsx` y `Formulario.jsx` como componentes
+   reutilizables.
+4. **Documentacion**: `docs/ARQUITECTURA.md`, diagrama corregido y presentacion en
+   `docs/presentacion/Arquitectura-Embriagados.pptx`.
+
+Commits sugeridos:
+
+```bash
+git switch feature/arquitectura-capas
+git add backend
+git commit -m "refactor(backend): agregar repositorios y servicios por capas"
+git add frontend
+git commit -m "refactor(frontend): extraer componentes compartidos"
+git add docs README.md presentacion
+git commit -m "docs(arquitectura): diagrama, documentacion y presentacion"
+```
+
 ## Integracion final a main
 
 ```bash
