@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { initSchema, seedIfEmpty, dbPath } from './db.js';
+import { AppError } from './errors/AppError.js';
 import productsRouter from './routes/products.js';
 import categoriesRouter from './routes/categories.js';
 import ingredientsRouter from './routes/ingredients.js';
@@ -30,6 +31,10 @@ app.use((req, res) => {
 
 // Manejo de errores
 app.use((err, _req, res, _next) => {
+  if (err instanceof AppError) {
+    return res.status(err.status).json({ error: err.message });
+  }
+
   console.error(err);
   res.status(500).json({ error: err.message || 'Error interno del servidor' });
 });

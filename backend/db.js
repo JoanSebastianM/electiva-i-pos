@@ -104,4 +104,12 @@ export function getDb() {
   return db;
 }
 
+/**
+ * Ejecuta una funcion dentro de una transaccion de SQLite.
+ * Si la funcion lanza un error, todos los cambios se revierten.
+ */
+export function transaction(fn) {
+  return db.transaction(fn)();
+}
+
 export { dbPath };

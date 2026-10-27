@@ -133,6 +133,89 @@ test('Ventas: rechaza cantidad mayor al stock disponible', async () => {
   assert.equal(one.status, 201);
 });
 
+test('Ventas: descuenta el stock al registrar', async () => {
+  const product = await request(app)
+    .post('/api/products')
+    .send({ name: 'Producto stock venta', price: 1000, stock: 10 })
+    .then((r) => r.body);
+
+  const sale = await request(app)
+    .post('/api/sales')
+    .send({ productId: product.id, quantity: 3 });
+  assert.equal(sale.status, 201);
+
+  const updated = await request(app).get(`/api/products/${product.id}`);
+  assert.equal(updated.body.stock, 7);
+
+  await request(app).delete(`/api/sales/${sale.body.id}`).expect(200);
+  await request(app).delete(`/api/products/${product.id}`).expect(200);
+});
+
+test('Ventas: restaura el stock al eliminar la venta', async () => {
+  const product = await request(app)
+    .post('/api/products')
+    .send({ name: 'Producto stock restaurado', price: 1500, stock: 5 })
+    .then((r) => r.body);
+
+  const sale = await request(app)
+    .post('/api/sales')
+    .send({ productId: product.id, quantity: 2 });
+  assert.equal(sale.status, 201);
+
+  const afterSale = await request(app).get(`/api/products/${product.id}`);
+  assert.equal(afterSale.body.stock, 3);
+
+  await request(app).delete(`/api/sales/${sale.body.id}`).expect(200);
+
+  const afterDelete = await request(app).get(`/api/products/${product.id}`);
+  assert.equal(afterDelete.body.stock, 5);
+
+  await request(app).delete(`/api/products/${product.id}`).expect(200);
+});
+
+test('Ventas: una venta invalida no modifica el stock', async () => {
+  const product = await request(app)
+    .post('/api/products')
+    .send({ name: 'Producto stock intacto', price: 2000, stock: 4 })
+    .then((r) => r.body);
+
+  const res = await request(app)
+    .post('/api/sales')
+    .send({ productId: product.id, quantity: 5 });
+
+  assert.equal(res.status, 400);
+  assert.match(res.body.error, /Stock insuficiente/);
+
+  const after = await request(app).get(`/api/products/${product.id}`);
+  assert.equal(after.body.stock, 4);
+
+  await request(app).delete(`/api/products/${product.id}`).expect(200);
+});
+
+test('Ventas: vender todo el stock deja el producto en cero', async () => {
+  const product = await request(app)
+    .post('/api/products')
+    .send({ name: 'Producto stock exacto', price: 3000, stock: 2 })
+    .then((r) => r.body);
+
+  const sale = await request(app)
+    .post('/api/sales')
+    .send({ productId: product.id, quantity: 2 });
+  assert.equal(sale.status, 201);
+
+  const afterSale = await request(app).get(`/api/products/${product.id}`);
+  assert.equal(afterSale.body.stock, 0);
+
+  const rejected = await request(app)
+    .post('/api/sales')
+    .send({ productId: product.id, quantity: 1 });
+  assert.equal(rejected.status, 400);
+  assert.match(rejected.body.error, /Stock insuficiente/);
+
+  await request(app).delete(`/api/sales/${sale.body.id}`).expect(200);
+  await request(app).delete(`/api/products/${product.id}`).expect(200);
+});
+
 test('Ruta inexistente responde 404', async () => {
   const res = await request(app).get('/api/no-existe');
   assert.equal(res.status, 404);
