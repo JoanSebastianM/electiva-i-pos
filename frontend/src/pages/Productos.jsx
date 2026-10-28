@@ -12,6 +12,7 @@ export default function Productos() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [order, setOrder] = useState('name');
 
   useEffect(() => {
     api.categories
@@ -64,6 +65,17 @@ export default function Productos() {
       setError(err.message);
     }
   };
+    const orderedRows = [...rows].sort((a, b) => {
+    if (order === 'price_asc') {
+      return Number(a.price) - Number(b.price);
+    }
+
+    if (order === 'price_desc') {
+      return Number(b.price) - Number(a.price);
+    }
+
+    return a.name.localeCompare(b.name);
+  });
 
   return (
     <div className="panel">
@@ -79,6 +91,13 @@ export default function Productos() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+
+        <select value={order} onChange={(e) => setOrder(e.target.value)}>
+        <option value="name">Ordenar por: Nombre</option>
+        <option value="price_asc">Precio (menor)</option>
+        <option value="price_desc">Precio (mayor)</option>
+      </select>
+
         <button className="btn btn-primary" onClick={openCreate}>
           + Nuevo producto
         </button>
@@ -103,14 +122,14 @@ export default function Productos() {
                   Cargando...
                 </td>
               </tr>
-            ) : rows.length === 0 ? (
+            ) : orderedRows.length === 0 ? (
               <tr>
                 <td colSpan={6} className="empty">
                   No hay productos
                 </td>
               </tr>
             ) : (
-              rows.map((p) => (
+             orderedRows.map((p) => (
                 <tr key={p.id}>
                   <td className="muted">{p.id}</td>
                   <td>{p.name}</td>
