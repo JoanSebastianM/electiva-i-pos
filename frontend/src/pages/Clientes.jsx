@@ -13,12 +13,14 @@ export default function Clientes() {
   const [saving, setSaving] = useState(false);
 
   const openCreate = () => {
+    setError(null);
     setEditing(null);
     setForm({ name: '', phone: '' });
     setOpen(true);
   };
 
   const openEdit = (row) => {
+    setError(null);
     setEditing(row);
     setForm({ name: row.name, phone: row.phone ?? '' });
     setOpen(true);
@@ -26,13 +28,14 @@ export default function Clientes() {
 
   const submit = async (e) => {
     e.preventDefault();
+    setError(null);
     if (!form.name.trim()) return setError('El nombre es obligatorio');
     try {
       setSaving(true);
       await save({ name: form.name.trim(), phone: form.phone.trim() || null }, editing?.id);
       setOpen(false);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Error al guardar el cliente');
     } finally {
       setSaving(false);
     }
@@ -43,7 +46,7 @@ export default function Clientes() {
     try {
       await remove(row.id);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Error al eliminar el cliente');
     }
   };
 

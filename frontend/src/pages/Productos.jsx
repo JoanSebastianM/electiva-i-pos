@@ -23,12 +23,14 @@ export default function Productos() {
   }, []);
 
   const openCreate = () => {
+    setError(null);
     setEditing(null);
     setForm(emptyForm);
     setOpen(true);
   };
 
   const openEdit = (row) => {
+    setError(null);
     setEditing(row);
     setForm({ name: row.name, price: row.price, stock: row.stock, categoryId: row.categoryId ?? '' });
     setOpen(true);
@@ -36,23 +38,29 @@ export default function Productos() {
 
   const submit = async (e) => {
     e.preventDefault();
+    setError(null);
     if (!form.name.trim()) return setError('El nombre es obligatorio');
-    if (form.price === '' || isNaN(Number(form.price)) || Number(form.price) < 0)
+    if (form.price === '' || isNaN(Number(form.price)) || Number(form.price) < 0) {
       return setError('El precio debe ser un numero mayor o igual a 0');
+    }
+    const stockNum = form.stock === '' ? 0 : Number(form.stock);
+    if (isNaN(stockNum) || stockNum < 0) {
+      return setError('El stock debe ser un numero mayor o igual a 0');
+    }
     try {
       setSaving(true);
       await save(
         {
           name: form.name.trim(),
           price: Number(form.price),
-          stock: Number(form.stock || 0),
+          stock: stockNum,
           categoryId: form.categoryId ? Number(form.categoryId) : null
         },
         editing?.id
       );
       setOpen(false);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Error al guardar el producto');
     } finally {
       setSaving(false);
     }
@@ -63,7 +71,7 @@ export default function Productos() {
     try {
       await remove(row.id);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Error al eliminar el producto');
     }
   };
 
