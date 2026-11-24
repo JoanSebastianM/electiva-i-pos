@@ -1,128 +1,78 @@
-# EMBRIAGADOS CRUD — Proyecto Universitario
+﻿# Arquitectura con Ginna 1.1
 
-Sistema web con **CRUD completo** para la gestión de un negocio de granizados y complementos.
-Backend en **Node.js + Express + SQLite** y frontend en **React + Vite** conectado a la API.
+Entrega final del proyecto **Embriagados CRUD**, organizado por capas y listo para ejecutar.
 
-## Integrantes
+- **Presentación:** React 18 + Vite.
+- **Aplicación:** Node.js + Express.
+- **Acceso a datos:** patrón Repository.
+- **Persistencia:** SQLite con `better-sqlite3` (claves foráneas y WAL).
 
-| Nombre        | Rol / principales tareas                                 | Rama                    |
-| ------------- | -------------------------------------------------------- | ----------------------- |
-| Nicolás       | Módulo de **Productos** (backend + frontend)             | `feature/nicolas-productos` |
-| Joan          | Módulo de **Ventas** y validaciones (backend + frontend) | `feature/joan-ventas`   |
-| Ambos         | Base del sistema, Categorías, Ingredientes, Clientes, docs y pruebas | `main`    |
+## Contenido
 
-## Requisitos de la rúbrica cubiertos
+### App
 
-- [x] Backend en **Node.js + Express**
-- [x] Base de datos **SQLite** con tablas relacionadas (FK)
-- [x] **5 funcionalidades CRUD** completas: Productos, Categorías, Ingredientes, Clientes y Ventas
-- [x] Frontend conectado al backend (fetch + API REST)
-- [x] **Pruebas automatizadas** (`node --test` + supertest): 9 pruebas, todas pasando
-- [x] **Git/GitHub** con ramas por integrante (`feature/nicolas-productos`, `feature/joan-ventas`)
-- [x] **Documentación**: este README, `docs/TEST-CASES.md` y `docs/CONTRIBUCION-GIT.md`
+| Ruta | Descripción |
+| --- | --- |
+| `App/Abrir-App.bat` | Inicia backend y frontend y abre el navegador. |
+| `App/COMO-ABRIR-LA-APP.md` | Guía corta de requisitos y solución de problemas. |
+| `App/backend/` | API Express + SQLite en el puerto 3001. |
+| `App/frontend/` | Interfaz React + Vite en el puerto 5173. |
 
-## Tecnologias
+### Documentación
 
-| Capa      | Tecnologia                          |
-| --------- | ----------------------------------- |
-| Backend   | Node.js 20, Express, better-sqlite3 |
-| Base datos| SQLite (tablas con claves foraneas) |
-| Frontend  | React 18, Vite, react-router-dom    |
-| Pruebas   | node:test + supertest               |
+- `Documentacion/ADD - Arquitectura por Capas - Embriagados CRUD.docx`
+- `Documentacion/ARQUITECTURA.md`
+- `Documentacion/README.md`
+- `Documentacion/TEST-CASES.md`
+- `Documentacion/CONTRIBUCION-GIT.md`
+- `Documentacion/Casos_de_prueba.docx`
+- `Documentacion/Guia_de_ejecucion.docx`
+- `Documentacion/Guia_de_evidencia.docx`
 
-## Estructura del proyecto
+## Cómo ejecutar
 
-```
-universidad-embriagados/
-├── backend/
-│   ├── server.js          # entrada: levanta Express (puerto 3001)
-│   ├── app.js             # crea la app, monta las rutas
-│   ├── db.js              # conexion SQLite, tablas y FK, seed
-│   ├── seed.js            # llena la base con datos de ejemplo
-│   ├── routes/            # un router por entidad (CRUD)
-│   │   ├── products.js
-│   │   ├── categories.js
-│   │   ├── ingredients.js
-│   │   ├── customers.js
-│   │   └── sales.js
-│   └── test/api.test.js   # pruebas automatizadas de la API
-└── frontend/
-    ├── vite.config.js     # proxy /api -> localhost:3001
-    └── src/
-        ├── api.js         # cliente HTTP (fetch) para el backend
-        ├── hooks/useCrud.js
-        ├── pages/         # Productos, Categorias, Ingredientes, Clientes, Ventas
-        └── components/    # Layout, Modal
-```
+1. Entra a la carpeta `App`.
+2. Haz doble clic en `Abrir-App.bat`.
+3. Espera a que abran las ventanas de Backend y Frontend.
+4. Abre http://localhost:5173 si el navegador no se abre solo.
 
-## Como ejecutar el proyecto
-
-Necesitas **Node.js 20+** instalado.
-
-### 1) Backend (terminal 1)
+Ejecución manual:
 
 ```bash
-cd backend
+# Backend
+cd App/backend
 npm install
 npm start
-```
 
-La API queda en `http://localhost:3001`:
-- Estado: `GET http://localhost:3001/api/health`
-- Documentacion de rutas: ver [Endpoints](#endpoints)
-
-### 2) Frontend (terminal 2)
-
-```bash
-cd frontend
+# Frontend (otra terminal)
+cd App/frontend
 npm install
 npm run dev
-```
 
-Abre el navegador en **http://localhost:5173**. El frontend reenvia `/api/*` al backend
-(proxy de Vite), asi no hay problemas de CORS en desarrollo.
-
-### 3) Pruebas automatizadas
-
-```bash
-cd backend
+# Pruebas del backend
+cd App/backend
 npm test
 ```
 
-Salida esperada: `tests 9 · pass 9 · fail 0`.
+## Verificación
 
-## Endpoints (API REST)
+- Pruebas del backend: **18 de 18** (`node --test` + supertest).
+- Build del frontend: `npm run build` con Vite.
+- La base de datos se crea sola en `App/backend/data/embriagados.db`.
 
-| Metodo | Ruta                | Accion                                  |
-| ------ | ------------------- | --------------------------------------- |
-| GET    | `/api/health`       | Estado del servidor                     |
-| GET    | `/api/products`     | Listar productos (con categoria). `?search=` filtra |
-| GET    | `/api/products/:id` | Obtener un producto                     |
-| POST   | `/api/products`     | Crear producto                          |
-| PUT    | `/api/products/:id` | Editar producto                         |
-| DELETE | `/api/products/:id` | Eliminar producto                       |
-| GET/POST/PUT/DELETE | `/api/categories[/:id]` | CRUD de categorias            |
-| GET/POST/PUT/DELETE | `/api/ingredients[/:id]` | CRUD de ingredientes           |
-| GET/POST/PUT/DELETE | `/api/customers[/:id]` | CRUD de clientes (con `?search=`) |
-| GET    | `/api/sales`        | Listar ventas (total acumulado)         |
-| POST   | `/api/sales`        | Registrar venta (calcula el total)       |
-| DELETE | `/api/sales/:id`    | Eliminar venta                          |
+## Organización aplicada
 
-### Modelo de datos (SQLite)
+- **Capa 1 (presentación):** `api.js` solo contiene el cliente HTTP; `utils/format.js` concentra el formato de moneda; `hooks/useCrud.js` reutiliza el estado CRUD y `hooks/useCrudForm.js` el estado de los formularios; `components/` y `pages/` mantienen la interfaz.
+- **Capa 2 (aplicación):** rutas delgadas, servicios con validaciones y reglas de negocio. `CrudService` concentra el CRUD común y `SaleService` coordina las ventas con `InventoryService`.
+- **Capa 3 (acceso a datos):** contrato `IRepository`, base `SQLiteRepository` y un repositorio por entidad (`Product`, `Category`, `Ingredient`, `Customer`, `Sale`, `SaleItem`, `ProductIngredient`).
+- **Capa 4 (persistencia):** `db.js` define el esquema, los datos de ejemplo y las transacciones.
 
-- `Category(id, name)` — categorias (ej. Granizados)
-- `Product(id, name, categoryId FK, price, stock)` — catalogo
-- `Ingredient(id, name, unit, stock)` — insumos
-- `Customer(id, name, phone)` — clientes
-- `Sale(id, productId FK, quantity, unitPrice, total, createdAt)` — ventas
+## Reglas de ventas e inventario
 
-## Colaboracion en Git
+- El total se calcula con el precio actual del producto.
+- No se permite vender más unidades que el stock disponible.
+- Al registrar una venta se descuenta el stock del producto y el de los ingredientes de su receta.
+- Si no hay stock suficiente de un ingrediente, la venta se rechaza y no se modifica nada.
+- Al eliminar una venta se restauran el stock del producto y el de sus ingredientes.
+- La venta, los ítems y los cambios de stock se ejecutan en una sola transacción.
 
-Cada integrante trabaja en su propia rama y hace **sus propios commits** con su identidad
-configurada. Ver [docs/CONTRIBUCION-GIT.md](docs/CONTRIBUCION-GIT.md).
-
-## Documentacion y evidencia
-
-- Casos de prueba: [docs/TEST-CASES.md](docs/TEST-CASES.md)
-- Guia de git y tareas por integrante: [docs/CONTRIBUCION-GIT.md](docs/CONTRIBUCION-GIT.md)
-- Evidencia (videos/capturas y este proyecto): se sube a Google Drive compartido.
