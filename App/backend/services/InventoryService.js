@@ -1,9 +1,8 @@
 import { NotFoundError, ValidationError } from '../errors/AppError.js';
 
 /**
- * Encapsula las reglas de inventario usadas por el módulo de ventas:
- * disponibilidad de productos, consumo de ingredientes según la receta
- * y restauración de existencias al eliminar una venta.
+ * Administra las reglas de inventario utilizadas al registrar o eliminar ventas:
+ * valida existencias, calcula consumo de ingredientes y repone el inventario.
  */
 export default class InventoryService {
   constructor({ products, ingredients, recipes } = {}) {
@@ -16,84 +15,119 @@ export default class InventoryService {
     this.recipes = recipes;
   }
 
-  getProduct(productId) {
-    const product = this.products?.findById ? this.products.findById(Number(productId)) : null;
+  /** Obtiene un producto por su ID o informa que no existe. */
+  getProductById(productId) {
+    const product = this.products?.findById
+      ? this.products.findById(Number(productId))
+      : null;
+
     if (!product) throw new NotFoundError('Producto no encontrado');
     return product;
   }
 
-  assertAvailable(product, quantity) {
-    if (Number(quantity) > Number(product.stock)) {
+  /** Comprueba que el producto tenga unidades suficientes para la venta. */
+  validateProductStockAvailability(product, productQuantity) {
+    if (Number(productQuantity) > Number(product.stock)) {
       throw new ValidationError(
         `Stock insuficiente: solo hay ${product.stock} unidades de "${product.name}"`
       );
     }
   }
 
-  calculateRequiredIngredients(product, units) {
-    const quantity = Number(units || 0);
+  /** Calcula cuántas unidades de cada ingrediente consume la cantidad de productos indicada. */
+  calculateIngredientRequirementsForProduct(product, productQuantity) {
+    const normalizedProductQuantity = Number(productQuantity || 0);
     if (!product || !this.recipes?.findByProductId) return [];
 
-    return this.recipes.findByProductId(product.id).map((item) => ({
-      ingredientId: item.ingredientId,
-      quantity: Number(item.quantity || 0) * quantity
+    return this.recipes.findByProductId(product.id).map((recipeItem) => ({
+      ingredientId: recipeItem.ingredientId,
+      quantity: Number(recipeItem.quantity || 0) * normalizedProductQuantity
     }));
   }
 
-  assertIngredientsAvailable(requirements) {
-    for (const requirement of requirements) {
+  /** Verifica que existan todos los ingredientes y que sus cantidades alcancen para la venta. */
+  validateIngredientStockAvailability(ingredientRequirements) {
+    for (const ingredientRequirement of ingredientRequirements) {
       const ingredient = this.ingredients?.findById
-        ? this.ingredients.findById(requirement.ingredientId)
+        ? this.ingredients.findById(ingredientRequirement.ingredientId)
         : null;
+
       if (!ingredient) {
-        throw new ValidationError(`El ingrediente ${requirement.ingredientId} no existe`);
+        throw new ValidationError(
+          `El ingrediente ${ingredientRequirement.ingredientId} no existe`
+        );
       }
-      if (requirement.quantity > Number(ingredient.stock)) {
+
+      if (ingredientRequirement.quantity > Number(ingredient.stock)) {
         throw new ValidationError(
           `Stock insuficiente del ingrediente "${ingredient.name}": ` +
-            `se requieren ${requirement.quantity} ${ingredient.unit} y hay ${ingredient.stock}`
+            `se requieren ${ingredientRequirement.quantity} ${ingredient.unit} y hay ${ingredient.stock}`
         );
       }
     }
   }
 
-  deductIngredients(requirements) {
-    for (const requirement of requirements) {
-      const info = this.ingredients.decrementStock(requirement.ingredientId, requirement.quantity);
-      if (info && info.changes === 0) {
-        throw new ValidationError('No hay stock suficiente de ingredientes para completar la venta');
+  /** Descuenta del inventario las cantidades de ingredientes consumidas. */
+  deductIngredientStock(ingredientRequirements) {
+    for (const ingredientRequirement of ingredientRequirements) {
+      const updateResult = this.ingredients.decrementStock(
+        ingredientRequirement.ingredientId,
+        ingredientRequirement.quantity
+      );
+
+      if (updateResult && updateResult.changes === 0) {
+        throw new ValidationError(
+          'No hay stock suficiente de ingredientes para completar la venta'
+        );
       }
     }
   }
 
-  restoreIngredients(requirements) {
-    for (const requirement of requirements) {
-      this.ingredients.incrementStock(requirement.ingredientId, requirement.quantity);
+  /** Repone las cantidades de ingredientes asociadas a una venta eliminada. */
+  restoreIngredientStock(ingredientRequirements) {
+    for (const ingredientRequirement of ingredientRequirements) {
+      this.ingredients.incrementStock(
+        ingredientRequirement.ingredientId,
+        ingredientRequirement.quantity
+      );
     }
   }
 
-  deductStockForSale(product, units) {
-    const quantity = Number(units || 0);
-    this.assertAvailable(product, quantity);
+  /** Valida y descuenta el producto y los ingredientes necesarios para una venta. */
+  deductInventoryForSale(product, productQuantity) {
+    const normalizedProductQuantity = Number(productQuantity || 0);
 
-    const requirements = this.calculateRequiredIngredients(product, quantity);
-    this.assertIngredientsAvailable(requirements);
+    this.validateProductStockAvailability(product, normalizedProductQuantity);
 
-    const info = this.products.decrementStock(product.id, quantity);
-    if (info && info.changes === 0) {
+    const ingredientRequirements = this.calculateIngredientRequirementsForProduct(
+      product,
+      normalizedProductQuantity
+    );
+    this.validateIngredientStockAvailability(ingredientRequirements);
+
+    const updateResult = this.products.decrementStock(product.id, normalizedProductQuantity);
+    if (updateResult && updateResult.changes === 0) {
       throw new ValidationError('No hay stock suficiente para completar la venta');
     }
 
-    this.deductIngredients(requirements);
+    this.deductIngredientStock(ingredientRequirements);
     return true;
   }
 
-  restoreStockForSale(productId, units) {
-    const product = this.products?.findById ? this.products.findById(Number(productId)) : null;
+  /** Restaura el producto y sus ingredientes cuando se elimina una venta. */
+  restoreInventoryForSale(productId, productQuantity) {
+    const product = this.products?.findById
+      ? this.products.findById(Number(productId))
+      : null;
     if (!product) return;
 
-    const quantity = Number(units || 0);
-    this.products.incrementStock(product.id, quantity);
-    this.restoreIngredients(this.calculateRequiredIngredients(product, quantity));
+    const normalizedProductQuantity = Number(productQuantity || 0);
+    this.products.incrementStock(product.id, normalizedProductQuantity);
+
+    const ingredientRequirements = this.calculateIngredientRequirementsForProduct(
+      product,
+      normalizedProductQuantity
+    );
+    this.restoreIngredientStock(ingredientRequirements);
   }
 }

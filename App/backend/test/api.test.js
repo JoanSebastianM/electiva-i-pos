@@ -321,6 +321,62 @@ test('Ventas: el listado agrupa los items de cada venta', async () => {
   await request(app).delete(`/api/products/${productB.id}`).expect(200);
 });
 
+test('Ventas: registra varios productos en una sola venta y restaura todo el inventario', async () => {
+  const productA = await request(app)
+    .post('/api/products')
+    .send({ name: 'Producto carrito A', price: 1200, stock: 8 })
+    .then((response) => response.body);
+  const productB = await request(app)
+    .post('/api/products')
+    .send({ name: 'Producto carrito B', price: 2500, stock: 6 })
+    .then((response) => response.body);
+
+  const createdSale = await request(app)
+    .post('/api/sales')
+    .send({
+      items: [
+        { productId: productA.id, quantity: 2 },
+        { productId: productB.id, quantity: 3 }
+      ]
+    });
+
+  assert.equal(createdSale.status, 201);
+  assert.equal(createdSale.body.total, 9900);
+  assert.equal(createdSale.body.items.length, 2);
+  assert.equal(createdSale.body.items[0].productName, 'Producto carrito A');
+  assert.equal(createdSale.body.items[0].quantity, 2);
+  assert.equal(createdSale.body.items[1].productName, 'Producto carrito B');
+  assert.equal(createdSale.body.items[1].quantity, 3);
+
+  const saleList = await request(app).get('/api/sales');
+  const savedAsOneSale = saleList.body.filter((sale) => sale.id === createdSale.body.id);
+  assert.equal(savedAsOneSale.length, 1);
+  assert.equal(savedAsOneSale[0].items.length, 2);
+
+  const productAAfterSale = await request(app)
+    .get(`/api/products/${productA.id}`)
+    .then((response) => response.body);
+  const productBAfterSale = await request(app)
+    .get(`/api/products/${productB.id}`)
+    .then((response) => response.body);
+  assert.equal(productAAfterSale.stock, 6);
+  assert.equal(productBAfterSale.stock, 3);
+
+  await request(app).delete(`/api/sales/${createdSale.body.id}`).expect(200);
+
+  const productAAfterDelete = await request(app)
+    .get(`/api/products/${productA.id}`)
+    .then((response) => response.body);
+  const productBAfterDelete = await request(app)
+    .get(`/api/products/${productB.id}`)
+    .then((response) => response.body);
+  assert.equal(productAAfterDelete.stock, 8);
+  assert.equal(productBAfterDelete.stock, 6);
+
+  await request(app).delete(`/api/products/${productA.id}`).expect(200);
+  await request(app).delete(`/api/products/${productB.id}`).expect(200);
+});
+
 test('Ruta inexistente responde 404', async () => {
   const res = await request(app).get('/api/no-existe');
   assert.equal(res.status, 404);

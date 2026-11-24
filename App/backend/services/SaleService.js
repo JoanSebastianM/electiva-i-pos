@@ -1,11 +1,13 @@
 import { NotFoundError, ValidationError } from '../errors/AppError.js';
 
-function asList(items) {
+/** Convierte un elemento o una colección en una lista para procesar productos de una venta. */
+function convertToList(items) {
   if (Array.isArray(items)) return items;
   if (items && typeof items === 'object') return [items];
   return [];
 }
 
+/** Administra el registro, consulta y eliminación de ventas. */
 export default class SaleService {
   constructor({ sales, saleItems, inventory, transaction } = {}) {
     if (!sales) throw new Error('SaleService requiere sales');
@@ -19,123 +21,164 @@ export default class SaleService {
     this.transaction = transaction;
   }
 
-  list() {
+  /** Lista las ventas y adjunta a cada una los productos que contiene. */
+  listSales() {
     const sales = this.sales.findAll();
     if (sales.length === 0) return [];
 
-    const items = this.saleItems.findBySaleIds(sales.map((sale) => sale.id));
-    const itemsBySale = new Map();
+    const saleItems = this.saleItems.findBySaleIds(sales.map((sale) => sale.id));
+    const saleItemsBySaleId = new Map();
 
-    for (const item of items) {
-      const group = itemsBySale.get(item.saleId) || [];
-      group.push(item);
-      itemsBySale.set(item.saleId, group);
+    for (const saleItem of saleItems) {
+      const groupedItems = saleItemsBySaleId.get(saleItem.saleId) || [];
+      groupedItems.push(saleItem);
+      saleItemsBySaleId.set(saleItem.saleId, groupedItems);
     }
 
-    return sales.map((sale) => this.withItems(sale, itemsBySale.get(sale.id) || []));
+    return sales.map((sale) =>
+      this.buildSaleWithItems(sale, saleItemsBySaleId.get(sale.id) || [])
+    );
   }
 
-  get(id) {
-    const sale = this.sales.findById(id);
+  /** Busca una venta por su ID y devuelve también los productos asociados. */
+  getSaleById(saleId) {
+    const sale = this.sales.findById(saleId);
     if (!sale) throw new NotFoundError('Venta no encontrada');
-    return this.withItems(sale);
+    return this.buildSaleWithItems(sale);
   }
 
-  withItems(sale, items = this.saleItems.findBySaleId(sale.id)) {
-    const first = items[0] || {};
+  /** Construye la respuesta de una venta incluyendo sus artículos y datos principales. */
+  buildSaleWithItems(sale, saleItems = this.saleItems.findBySaleId(sale.id)) {
+    const firstSaleItem = saleItems[0] || {};
 
     return {
       ...sale,
-      items,
-      productId: first.productId ?? sale.productId,
-      quantity: first.quantity ?? sale.quantity,
-      unitPrice: first.unitPrice ?? sale.unitPrice,
-      productName: first.productName ?? sale.productName
+      items: saleItems,
+      productId: firstSaleItem.productId ?? sale.productId,
+      quantity: firstSaleItem.quantity ?? sale.quantity,
+      unitPrice: firstSaleItem.unitPrice ?? sale.unitPrice,
+      productName: firstSaleItem.productName ?? sale.productName
     };
   }
 
-  normalizeItems(input) {
-    const rawItems = Array.isArray(input)
-      ? input
-      : input?.items ??
-        input?.saleItems ??
-        (input?.productId || input?.product ? input : null);
-    const list = asList(rawItems);
+  /** Valida y normaliza los productos y cantidades recibidos para registrar una venta. */
+  normalizeSaleItems(saleData) {
+    const rawSaleItems = Array.isArray(saleData)
+      ? saleData
+      : saleData?.items ??
+        saleData?.saleItems ??
+        (saleData?.productId || saleData?.product ? saleData : null);
+    const saleItems = convertToList(rawSaleItems);
 
-    if (list.length === 0) {
+    if (saleItems.length === 0) {
       throw new ValidationError('Debes indicar al menos un producto');
     }
 
-    return list.map((item) => {
-      const productId = item.productId ?? item.product?.id;
-      const quantity = item.quantity;
+    return saleItems.map((saleItem) => {
+      const productId = saleItem.productId ?? saleItem.product?.id;
+      const productQuantity = saleItem.quantity;
 
       if (!productId || isNaN(Number(productId))) {
         throw new ValidationError('Debes indicar el producto');
       }
-      if (quantity == null || !Number.isInteger(Number(quantity)) || Number(quantity) < 1) {
+      if (
+        productQuantity == null ||
+        !Number.isInteger(Number(productQuantity)) ||
+        Number(productQuantity) < 1
+      ) {
         throw new ValidationError('La cantidad debe ser un entero mayor o igual a 1');
       }
 
-      return { productId: Number(productId), quantity: Number(quantity) };
+      return {
+        productId: Number(productId),
+        quantity: Number(productQuantity)
+      };
     });
   }
 
-  registerSale(input = {}) {
-    const entries = this.normalizeItems(input);
-    const customerId = input?.customerId ?? input?.customer?.id ?? null;
+  /** Registra una venta completa y descuenta el inventario dentro de una transacción. */
+  registerSale(saleData = {}) {
+    const normalizedSaleItems = this.normalizeSaleItems(saleData);
+    const customerId = saleData?.customerId ?? saleData?.customer?.id ?? null;
 
     return this.transaction(() => {
-      const prepared = entries.map((entry) => {
-        const product = this.inventory.getProduct(entry.productId);
+      const preparedSaleItems = normalizedSaleItems.map((saleItem) => {
+        const product = this.inventory.getProductById(saleItem.productId);
         const unitPrice = Number(product.price);
-        const subtotal = unitPrice * entry.quantity;
-        return { product, quantity: entry.quantity, unitPrice, subtotal };
+        const subtotal = unitPrice * saleItem.quantity;
+
+        return {
+          product,
+          quantity: saleItem.quantity,
+          unitPrice,
+          subtotal
+        };
       });
 
-      const total = prepared.reduce((sum, entry) => sum + entry.subtotal, 0);
+      const total = preparedSaleItems.reduce(
+        (saleTotal, saleItem) => saleTotal + saleItem.subtotal,
+        0
+      );
       const sale = this.sales.create({ customerId, total });
       if (!sale) throw new ValidationError('No se pudo registrar la venta');
 
-      for (const entry of prepared) {
+      for (const saleItem of preparedSaleItems) {
         this.saleItems.create({
           saleId: sale.id,
-          productId: entry.product.id,
-          quantity: entry.quantity,
-          unitPrice: entry.unitPrice,
-          subtotal: entry.subtotal
+          productId: saleItem.product.id,
+          quantity: saleItem.quantity,
+          unitPrice: saleItem.unitPrice,
+          subtotal: saleItem.subtotal
         });
-        this.inventory.deductStockForSale(entry.product, entry.quantity);
+
+        this.inventory.deductInventoryForSale(saleItem.product, saleItem.quantity);
       }
 
-      return this.get(sale.id);
+      return this.getSaleById(sale.id);
     });
   }
 
-  remove(id) {
+  /** Elimina una venta y devuelve al inventario los productos e ingredientes consumidos. */
+  deleteSaleById(saleId) {
     return this.transaction(() => {
-      const sale = this.sales.findById(id);
+      const sale = this.sales.findById(saleId);
       if (!sale) throw new NotFoundError('Venta no encontrada');
 
-      const saleItems = this.saleItems.findBySaleId(id);
-      const itemsToRestore = saleItems.length > 0 ? saleItems : this.legacyItems(sale);
+      const saleItems = this.saleItems.findBySaleId(saleId);
+      const itemsToRestore = saleItems.length > 0
+        ? saleItems
+        : this.getLegacyItemsForSale(sale);
 
-      this.sales.delete(id);
+      this.sales.delete(saleId);
 
-      for (const item of itemsToRestore) {
-        const productId = item.productId ?? item.product?.id;
-        if (productId && item.quantity) {
-          this.inventory.restoreStockForSale(productId, item.quantity);
+      for (const saleItem of itemsToRestore) {
+        const productId = saleItem.productId ?? saleItem.product?.id;
+        if (productId && saleItem.quantity) {
+          this.inventory.restoreInventoryForSale(productId, saleItem.quantity);
         }
       }
 
-      return { deleted: true, id: Number(id) };
+      return { deleted: true, id: Number(saleId) };
     });
   }
 
-  legacyItems(sale) {
+  /** Recupera los datos de producto de ventas antiguas que no tienen detalle separado. */
+  getLegacyItemsForSale(sale) {
     return sale.productId && sale.quantity
       ? [{ productId: sale.productId, quantity: sale.quantity }]
       : [];
+  }
+
+  // Adaptadores temporales para conservar el contrato de las rutas actuales de ventas.
+  list() {
+    return this.listSales();
+  }
+
+  get(saleId) {
+    return this.getSaleById(saleId);
+  }
+
+  remove(saleId) {
+    return this.deleteSaleById(saleId);
   }
 }
