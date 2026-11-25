@@ -1,0 +1,20 @@
+{
+  "name": "pos-granizados",
+  "private": true,
+  "version": "1.0.0",
+  "description": "POS Granizados con backend compartido, frontend Vanilla y frontend React",
+  "scripts": {
+    "install:backend": "npm --prefix backend install",
+    "install:react": "npm --prefix frontend-react install",
+    "install:all": "npm run install:backend && npm run install:react",
+    "dev:backend": "npm --prefix backend run dev",
+    "start:backend": "npm --prefix backend start",
+    "dev:vanilla": "npx --yes http-server frontend-vanilla -p 5500 -c-1 --cors",
+    "dev:react": "npm --prefix frontend-react run dev",
+    "build:react": "npm --prefix frontend-react run build",
+    "test:backend": "npm --prefix backend test"
+  },
+  "dependencies": {
+    "ws": "^8.23.0"
+  }
+}

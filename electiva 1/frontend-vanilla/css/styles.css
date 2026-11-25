@@ -1,0 +1,18 @@
+:root{--bg:#fff7ed;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#f97316;--primary-dark:#ea580c;--danger:#dc2626;--ok:#059669;--border:#fed7aa;--shadow:0 10px 30px rgba(0,0,0,.06);font-family:Segoe UI,system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fff7ed,#ecfccb);color:var(--text)}
+.app{max-width:1200px;margin:0 auto;padding:20px}
+.topbar{display:flex;gap:16px;justify-content:space-between;align-items:center;background:var(--card);padding:16px 20px;border-radius:18px;box-shadow:var(--shadow);margin-bottom:16px}
+.brand .badge{display:inline-block;background:var(--primary);color:#fff;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.brand h1{margin:6px 0 0;font-size:28px}.muted{color:var(--muted)}
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.nav button,.btn{border:1px solid #fdba74;background:#fff;color:#9a3412;padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer}
+.nav button.active,.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.danger{background:#fee2e2;color:#991b1b;border-color:#fecaca}.btn:disabled{opacity:.5;cursor:not-allowed}
+.grid{display:grid;gap:16px}.grid-2{grid-template-columns:360px 1fr}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
+.card,.panel{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:16px}
+.card .value{font-size:28px;font-weight:800;margin-top:8px}
+label{display:block;font-size:14px;font-weight:600;margin-bottom:10px}input,select{width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:12px;margin-top:4px;font:inherit}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #f3f4f6;text-align:left;font-size:14px;vertical-align:top}th{color:#6b7280}
+.row{display:flex;gap:8px;flex-wrap:wrap}.msg{padding:10px 12px;border-radius:12px;margin-bottom:12px;font-size:14px}.msg.error{background:#fee2e2;color:#991b1b}.msg.ok{background:#d1fae5;color:#065f46}
+.login{max-width:420px;margin:60px auto}.hidden{display:none!important}
+@media (max-width:900px){.grid-2{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start}}
