@@ -1,4 +1,6 @@
-﻿* d248c62 (HEAD -> main, origin/main, origin/HEAD) release(electiva-1): cerrar entrega al 100%
+﻿* 7399ea6 (HEAD -> main, origin/main, origin/HEAD) release(pos): dejar paquete listo para presentacion
+* 175738c docs(evidencia): registrar historial final
+* d248c62 release(electiva-1): cerrar entrega al 100%
 * 6b227b9 release(electiva-1): publicar versi├│n corregida completa
 *   2b6acd2 Merge pull request #1 from JoanSebastianM/feature/nicolas-productos
 |\  
@@ -18,7 +20,3 @@
 | | * f460be6 (origin/feature/arquitectura-capas) docs(presentacion): generar presentacion de arquitectura
 | | * 498fe49 docs(arquitectura): documentar capas y actualizar pruebas
 | | * 1bbdd90 refactor(frontend): extraer Navbar, Tabla y Formulario
-| | * e58caad refactor(backend): agregar capas de repositorios y servicios
-| |/  
-|/|   
-* | f42b96b chore: ignorar archivos temporales de Word
