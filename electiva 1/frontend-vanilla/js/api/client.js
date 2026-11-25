@@ -19,7 +19,7 @@ async function http(method, path, body) {
 }
 
 const crud = (name) => ({
-  list: () => http('GET', `/${name}`),
+  list: (query = '') => http('GET', `/${name}${query ? `?${query}` : ''}`),
   get: (id) => http('GET', `/${name}/${id}`),
   create: (data) => http('POST', `/${name}`, data),
   update: (id, data) => http('PUT', `/${name}/${id}`, data),

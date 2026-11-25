@@ -163,6 +163,27 @@ test('Productos: validacion', async () => {
   assert.equal(res.status, 400);
 });
 
+test('Productos: ordenamiento por precio', async () => {
+  const cheap = await createProduct({ price: 1000 });
+  const expensive = await createProduct({ price: 3000 });
+  const middle = await createProduct({ price: 2000 });
+
+  const asc = await api(admin, 'get', '/api/products?order=price_asc');
+  assert.equal(asc.status, 200);
+  const ascIds = asc.body.map((p) => p.id);
+  assert.ok(ascIds.indexOf(cheap.id) < ascIds.indexOf(middle.id));
+  assert.ok(ascIds.indexOf(middle.id) < ascIds.indexOf(expensive.id));
+
+  const desc = await api(admin, 'get', '/api/products?order=price_desc');
+  assert.equal(desc.status, 200);
+  const descIds = desc.body.map((p) => p.id);
+  assert.ok(descIds.indexOf(expensive.id) < descIds.indexOf(middle.id));
+  assert.ok(descIds.indexOf(middle.id) < descIds.indexOf(cheap.id));
+
+  const searched = await api(admin, 'get', `/api/products?search=${encodeURIComponent(cheap.name)}&order=price_desc`);
+  assert.equal(searched.body[0].id, cheap.id);
+});
+
 test('Categorias: CRUD', async () => {
   const created = await api(admin, 'post', '/api/categories').send({ name: unique('Postres') });
   assert.equal(created.status, 201);

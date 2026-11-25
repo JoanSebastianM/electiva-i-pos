@@ -6,6 +6,13 @@ const listSql = `
   LEFT JOIN Category c ON c.id = p.categoryId
 `;
 
+const orderSql = {
+  price_asc: 'p.price ASC, p.name ASC',
+  price_desc: 'p.price DESC, p.name ASC',
+  name_asc: 'p.name ASC',
+  name_desc: 'p.name DESC'
+};
+
 export default class ProductRepository extends SQLiteRepository {
   constructor() {
     super({
@@ -15,14 +22,15 @@ export default class ProductRepository extends SQLiteRepository {
     });
   }
 
-  findAll({ search } = {}) {
+  findAll({ search, order } = {}) {
+    const clause = orderSql[order] || orderSql.name_asc;
     if (search) {
       return this.db
-        .prepare(`${listSql} WHERE p.name LIKE ? ORDER BY p.name`)
+        .prepare(`${listSql} WHERE p.name LIKE ? ORDER BY ${clause}`)
         .all(`%${search}%`);
     }
 
-    return this.db.prepare(`${listSql} ORDER BY p.name`).all();
+    return this.db.prepare(`${listSql} ORDER BY ${clause}`).all();
   }
 
   findById(id) {

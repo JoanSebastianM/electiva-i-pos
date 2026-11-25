@@ -1,0 +1,104 @@
+﻿
+> pos-granizados-backend@1.0.0 test
+> node --test test/
+
+TAP version 13
+# Subtest: GET /api/health responde ok
+ok 1 - GET /api/health responde ok
+  ---
+  duration_ms: 12.0268
+  ...
+# Subtest: Auth: login valido, invalido y sin password
+ok 2 - Auth: login valido, invalido y sin password
+  ---
+  duration_ms: 133.5643
+  ...
+# Subtest: Seguridad: rutas protegidas y header de cliente
+ok 3 - Seguridad: rutas protegidas y header de cliente
+  ---
+  duration_ms: 17.3276
+  ...
+# Subtest: Auth: logout invalida la sesion
+ok 4 - Auth: logout invalida la sesion
+  ---
+  duration_ms: 71.9932
+  ...
+# Subtest: Roles: cajero lee y crea ventas, pero no administra
+ok 5 - Roles: cajero lee y crea ventas, pero no administra
+  ---
+  duration_ms: 187.3283
+  ...
+# Subtest: Users: CRUD, validacion de rol y sin exponer password
+ok 6 - Users: CRUD, validacion de rol y sin exponer password
+  ---
+  duration_ms: 88.1687
+  ...
+# Subtest: Productos: CRUD completo
+ok 7 - Productos: CRUD completo
+  ---
+  duration_ms: 27.9244
+  ...
+# Subtest: Productos: validacion
+ok 8 - Productos: validacion
+  ---
+  duration_ms: 5.4047
+  ...
+# Subtest: Productos: ordenamiento por precio
+ok 9 - Productos: ordenamiento por precio
+  ---
+  duration_ms: 40.1832
+  ...
+# Subtest: Categorias: CRUD
+ok 10 - Categorias: CRUD
+  ---
+  duration_ms: 15.9328
+  ...
+# Subtest: Ingredientes: CRUD
+ok 11 - Ingredientes: CRUD
+  ---
+  duration_ms: 16.8473
+  ...
+# Subtest: Clientes: CRUD
+ok 12 - Clientes: CRUD
+  ---
+  duration_ms: 16.5475
+  ...
+# Subtest: Inventario: lista y ajusta stock
+ok 13 - Inventario: lista y ajusta stock
+  ---
+  duration_ms: 7.9971
+  ...
+# Subtest: Recetas: crea, consulta y reemplaza
+ok 14 - Recetas: crea, consulta y reemplaza
+  ---
+  duration_ms: 25.0562
+  ...
+# Subtest: Ventas: descuenta y restaura producto e ingredientes
+ok 15 - Ventas: descuenta y restaura producto e ingredientes
+  ---
+  duration_ms: 50.1172
+  ...
+# Subtest: Ventas: rechaza stock insuficiente
+ok 16 - Ventas: rechaza stock insuficiente
+  ---
+  duration_ms: 14.4167
+  ...
+# Subtest: Ventas: reversa transaccional ante error
+ok 17 - Ventas: reversa transaccional ante error
+  ---
+  duration_ms: 19.7127
+  ...
+# Subtest: CORS: permite origenes de los frontends y bloquea otros
+ok 18 - CORS: permite origenes de los frontends y bloquea otros
+  ---
+  duration_ms: 7.7576
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1414.4893

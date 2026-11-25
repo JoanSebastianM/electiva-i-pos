@@ -1,0 +1,14 @@
+﻿OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\main.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\api\client.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\categories.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\customers.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\dashboard.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\ingredients.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\inventory.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\login.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\products.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\recipes.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\sales.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\users.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\utils\dom.js
+OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\utils\format.js

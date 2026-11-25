@@ -42,7 +42,7 @@
 
 ## ETAPA 7 — Pruebas
 
-- Backend: `cd backend && npm test` -> **17/17 pass** (verificado nuevamente; la suite usa DB en memoria).
+- Backend: `cd backend && npm test` -> **18/18 pass** (verificado nuevamente; la suite usa DB en memoria).
 - React: `typecheck`, `lint` y `build` OK.
 - Base oficial migrada para crear `Session` e índice `idx_product_ingredient_pair`, conservando 1 usuario y 5 productos.
 - **Verificación visual completada:** backend, Vanilla y React se ejecutaron simultáneamente y se probaron con Chrome 158 headless vía CDP. Se validaron login admin/cajero, sesión compartida, recetas, categorías visibles en ambos frontends, permisos de cajero y registro de ventas en Vanilla y React. Los datos temporales se eliminaron y el stock quedó restaurado.
@@ -50,4 +50,10 @@
 ## ETAPA 8 — Documentación
 
 - Actualizados README raíz, LEEME, documentación en `docs/Documentacion/`, informe y READMEs de ambos frontends para reflejar arquitectura real, auth por sesión, roles, recetas, variables de entorno, puertos, scripts, pruebas y validación visual completada.
-- Durante la etapa documental no se modificó código de backend ni frontends; `App/COMO-ABRIR-LA-APP.md` y `App/Abrir-App.bat` sí se actualizaron para marcar esa carpeta como legacy. No se hizo commit ni push.
+- La documentación final se publicó en GitHub junto con el código; `App/COMO-ABRIR-LA-APP.md` y `App/Abrir-App.bat` permanecen como referencia legacy.
+
+## ETAPA 9 — Cierre al 100%
+
+- Se cerraron las dos tareas históricas pendientes: orden por precio en Productos (`?order=price_asc` / `price_desc`) y confirmación del resumen antes de registrar una venta, en backend, React y Vanilla.
+- La suite quedó en **18/18 pass** y React en `typecheck`, `lint` y `build` OK; los 14 módulos JS de Vanilla pasaron `node --check`.
+- Jira quedó con 14 actividades en estado `Finalizada`, seguimiento del equipo, links de Jira/GitHub en comentarios y adjuntos de texto/ZIP. No se generaron capturas ni imágenes nuevas.

@@ -44,6 +44,8 @@ Desde la raíz también existen `npm run dev:react` y `npm run build:react`.
 Login, dashboard, productos, categorías, ingredientes, clientes, usuarios, inventario, recetas y ventas.
 
 - Recetas: `GET/PUT /api/products/:productId/recipes`; `PUT` reemplaza la receta con `{items:[{ingredientId,quantity}]}` en una transacción.
+- Productos: búsqueda por nombre, filtro por categoría y orden por precio (`price_asc` / `price_desc`).
+- Ventas: resumen previo y confirmación explícita antes de registrar.
 - `admin`: acceso completo. `cajero`: lectura de catálogos/inventario/ventas/recetas y creación de ventas; sin Usuarios ni acciones de administración.
 - Desarrollo: `admin / admin123`. Producción exige `SEED_ADMIN_USERNAME` y `SEED_ADMIN_PASSWORD` para crear el usuario inicial.
 
@@ -58,6 +60,6 @@ npm run lint
 npm run build
 ```
 
-Backend: `cd backend && npm test` -> 17/17 pass. La verificación visual simultánea con Vanilla se completó en Chrome headless; login admin/cajero, recetas, permisos y ventas OK.
+Backend: `cd backend && npm test` -> 18/18 pass. La verificación visual simultánea con Vanilla se completó en Chrome headless; login admin/cajero, recetas, permisos y ventas OK.
 
 Más detalles en [../README.md](../README.md) y [../docs/Documentacion/TEST-CASES.md](../docs/Documentacion/TEST-CASES.md).

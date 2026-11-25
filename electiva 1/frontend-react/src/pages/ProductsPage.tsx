@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import Notification from '../components/Notification';
 import StyledButton from '../components/StyledButton';
 import { useProducts } from '../hooks/useProducts';
@@ -10,12 +10,15 @@ const empty: ProductPayload = { name: '', categoryId: null, price: 0, stock: 0 }
 interface Props { isAdmin: boolean }
 
 export default function ProductsPage({ isAdmin }: Props) {
-  const { products, categories, loading, error, save, remove, setError } = useProducts();
+  const { products, categories, loading, error, load, save, remove, setError } = useProducts();
   const [form, setForm] = useState<ProductPayload>(empty);
   const [editing, setEditing] = useState<Product | null>(null);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [order, setOrder] = useState('');
   const [msg, setMsg] = useState('');
+
+  useEffect(() => { void load(search, order); }, [load, search, order]);
 
   const filtered = useMemo(() => products.filter((p) => {
     const bySearch = p.name.toLowerCase().includes(search.toLowerCase());
@@ -54,6 +57,11 @@ export default function ProductsPage({ isAdmin }: Props) {
           <select className="rounded-xl border px-3 py-2" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
             <option value="">Todas las categorias</option>
             {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+          <select className="rounded-xl border px-3 py-2" value={order} onChange={(e) => setOrder(e.target.value)}>
+            <option value="">Orden: nombre</option>
+            <option value="price_asc">Precio: menor a mayor</option>
+            <option value="price_desc">Precio: mayor a menor</option>
           </select>
         </div>
         <Notification message={error} type="error" onClose={() => setError('')} />

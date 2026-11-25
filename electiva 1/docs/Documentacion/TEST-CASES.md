@@ -13,7 +13,7 @@ cd backend
 npm test
 ```
 
-Resultado: **tests 17 · pass 17 · fail 0**. La suite usa una base SQLite en memoria y no modifica `backend/data/embriagados.db`.
+Resultado: **tests 18 · pass 18 · fail 0**. La suite usa una base SQLite en memoria y no modifica `backend/data/embriagados.db`.
 
 | # | Funcionalidad | Caso cubierto | Resultado |
 | --- | --- | --- | --- |
@@ -25,15 +25,16 @@ Resultado: **tests 17 · pass 17 · fail 0**. La suite usa una base SQLite en me
 | A6 | Usuarios | CRUD, rol inválido -> 400, respuestas sin `password`, borrado -> 200 | OK (automático) |
 | A7 | Productos | CRUD completo; `GET` tras borrar -> 404 | OK (automático) |
 | A8 | Productos | Crear sin nombre -> 400 | OK (automático) |
-| A9 | Categorías | CRUD completo | OK (automático) |
-| A10 | Ingredientes | CRUD completo | OK (automático) |
-| A11 | Clientes | CRUD completo | OK (automático) |
-| A12 | Inventario | Listado y ajuste de stock | OK (automático) |
-| A13 | Recetas | `PUT` guarda y reemplaza la receta; `GET` devuelve los ingredientes con nombre | OK (automático) |
-| A14 | Ventas | Descuenta y restaura stock de producto e ingredientes; asocia `userId` de la sesión | OK (automático) |
-| A15 | Ventas | Stock insuficiente -> 400 y stock sin cambios | OK (automático) |
-| A16 | Ventas | Error en una venta con ítems -> reversión transaccional; stock previo intacto | OK (automático) |
-| A17 | CORS | Origen `http://localhost:5173` permitido con credenciales; origen externo bloqueado | OK (automático) |
+| A9 | Productos | `?order=price_asc` y `price_desc` ordenan por precio; búsqueda + orden combinados | OK (automático) |
+| A10 | Categorías | CRUD completo | OK (automático) |
+| A11 | Ingredientes | CRUD completo | OK (automático) |
+| A12 | Clientes | CRUD completo | OK (automático) |
+| A13 | Inventario | Listado y ajuste de stock | OK (automático) |
+| A14 | Recetas | `PUT` guarda y reemplaza la receta; `GET` devuelve los ingredientes con nombre | OK (automático) |
+| A15 | Ventas | Descuenta y restaura stock de producto e ingredientes; asocia `userId` de la sesión | OK (automático) |
+| A16 | Ventas | Stock insuficiente -> 400 y stock sin cambios | OK (automático) |
+| A17 | Ventas | Error en una venta con ítems -> reversión transaccional; stock previo intacto | OK (automático) |
+| A18 | CORS | Origen `http://localhost:5173` permitido con credenciales; origen externo bloqueado | OK (automático) |
 
 Comprobaciones adicionales ya ejecutadas en este proyecto:
 
@@ -43,6 +44,8 @@ Comprobaciones adicionales ya ejecutadas en este proyecto:
 | `cd frontend-react && npm run lint` | OK |
 | `cd frontend-react && npm run build` | OK |
 | Sintaxis de 14 módulos JS de Vanilla | OK |
+| Selector de orden por precio en React y Vanilla conectado a `?order=price_asc` / `price_desc` | OK |
+| Confirmación de resumen antes de registrar venta en React y Vanilla | OK |
 | Base oficial migrada (`Session` e `idx_product_ingredient_pair`), 1 usuario y 5 productos conservados | OK |
 | Smoke HTTP con cookie y header de cliente | 401 sin sesión; 200 en login, me, catálogos, recetas y logout |
 
@@ -70,7 +73,7 @@ Entorno: Chrome 158 headless controlado por CDP, con backend en `3001`, Vanilla 
 
 ## Evidencia disponible
 
-- Salida de `npm test`: 17/17 pass.
+- Salida de `npm test`: 18/18 pass.
 - Salida de `typecheck`, `lint` y `build` de React.
 - Resultado del smoke HTTP: `401` sin sesión y `200` en rutas autenticadas.
 - Resultado de verificación CDP: login admin/cajero, permisos, recetas, categorías y ventas OK en ambos frontends.

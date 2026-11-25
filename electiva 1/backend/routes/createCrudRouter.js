@@ -4,12 +4,15 @@ import { Router } from 'express';
  * Construye un router REST delgado. Toda la logica vive en el servicio;
  * aqui solo se traduce HTTP <-> servicio.
  */
-export default function createCrudRouter(service, { search = false } = {}) {
+export default function createCrudRouter(service, { search = false, sort = false } = {}) {
   const router = Router();
 
   router.get('/', (req, res, next) => {
     try {
-      res.json(service.list(search ? { search: req.query.search } : undefined));
+      const options = {};
+      if (search) options.search = req.query.search;
+      if (sort) options.order = req.query.order;
+      res.json(service.list(Object.keys(options).length ? options : undefined));
     } catch (error) {
       next(error);
     }

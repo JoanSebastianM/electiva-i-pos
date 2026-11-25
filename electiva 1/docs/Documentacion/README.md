@@ -28,7 +28,7 @@ Detalle en [ARQUITECTURA.md](ARQUITECTURA.md).
 - Autenticación por sesión HttpOnly `pg_session` validada en SQLite; roles `admin` y `cajero`.
 - Dos frontends conectados a la API: HTML/CSS/JS y React + TypeScript + Vite + Tailwind.
 - Arquitectura por capas con servicios y patrón Repository.
-- Pruebas automatizadas del backend: **17/17 pass**.
+- Pruebas automatizadas del backend: **18/18 pass**.
 - Documentación: este README, `ARQUITECTURA.md`, `TEST-CASES.md` y `CONTRIBUCION-GIT.md`.
 
 ## Tecnologías
@@ -142,7 +142,7 @@ La base oficial `backend/data/embriagados.db` fue migrada para crear `Session` y
 ## Colaboración y evidencia
 
 - Git: [CONTRIBUCION-GIT.md](CONTRIBUCION-GIT.md).
-- Casos de prueba: [TEST-CASES.md](TEST-CASES.md); automatizados 17/17 y verificación visual en navegador completada.
+- Casos de prueba: [TEST-CASES.md](TEST-CASES.md); automatizados 18/18 y verificación visual en navegador completada.
 - Diagrama: [../Diagrama/diagrama-arquitectura.svg](../Diagrama/diagrama-arquitectura.svg).
 - Presentación: [../Presentacion/Arquitectura-Embriagados.pptx](../Presentacion/Arquitectura-Embriagados.pptx).
 - Backups: `Desktop/backup-pos-granizados-correcciones-20261124-090701` y ZIP originales en `Desktop`.

@@ -138,7 +138,7 @@ cd backend
 npm test
 ```
 
-Resultado verificado: **17/17 pruebas en verde** (suite con base en memoria).
+Resultado verificado: **18/18 pruebas en verde** (suite con base en memoria).
 
 React (verificado también):
 
@@ -177,4 +177,11 @@ La base oficial `backend/data/embriagados.db` fue migrada para crear la tabla `S
 - Git: [docs/Documentacion/CONTRIBUCION-GIT.md](docs/Documentacion/CONTRIBUCION-GIT.md)
 - Casos de prueba: [docs/Documentacion/TEST-CASES.md](docs/Documentacion/TEST-CASES.md)
 - Informe: [docs/INFORME-EJECUCION.md](docs/INFORME-EJECUCION.md)
+- Matriz de calificación: [docs/Documentacion/CALIFICACION-EVIDENCIA.md](docs/Documentacion/CALIFICACION-EVIDENCIA.md)
 - Frontends: [frontend-vanilla/README.md](frontend-vanilla/README.md) y [frontend-react/README.md](frontend-react/README.md)
+
+## Entrega y seguimiento
+
+- Jira: https://unimayor-team-jwt57jwx.atlassian.net/jira/software/projects/ELEC/summary
+- GitHub: https://github.com/JoanSebastianM/electiva-i-pos
+- Estado: 14/14 actividades `Finalizada`; sin pendientes.

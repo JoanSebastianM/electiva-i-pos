@@ -32,12 +32,14 @@ Health de la API: `http://localhost:3001/api/health`.
 Login, dashboard, productos, categorías, ingredientes, clientes, usuarios, inventario, recetas y ventas.
 
 - Recetas: `GET/PUT /api/products/:productId/recipes`; `PUT` reemplaza la receta con `{items:[{ingredientId,quantity}]}` en una transacción.
+- Productos: selector de orden por precio (`price_asc` / `price_desc`).
+- Ventas: resumen previo y confirmación explícita antes de registrar.
 - `admin`: acceso completo. `cajero`: lectura de catálogos/inventario/ventas/recetas y creación de ventas; sin Usuarios ni acciones de administración.
 - Desarrollo: `admin / admin123`. En producción se requieren `SEED_ADMIN_USERNAME` y `SEED_ADMIN_PASSWORD` para el usuario inicial.
 
 ## Verificación
 
-- Backend: `cd backend && npm test` -> 17/17 pass.
+- Backend: `cd backend && npm test` -> 18/18 pass.
 - Verificación visual de este frontend junto con React: completada en Chrome headless; login admin/cajero, recetas, permisos y ventas OK.
 
 Más detalles en [../README.md](../README.md) y [../docs/Documentacion/TEST-CASES.md](../docs/Documentacion/TEST-CASES.md).

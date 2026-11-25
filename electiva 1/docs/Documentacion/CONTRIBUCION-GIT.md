@@ -8,7 +8,7 @@ El proyecto tiene una base funcional en `main` con backend compartido y dos fron
 - La identidad de Git se configura con el nombre real de cada integrante.
 - Los commits deben ser claros y estar en español.
 - Diferencias de contexto reales (fechas, datos del seed) son normales en un proyecto de equipo.
-- Antes de integrar, ejecutar las pruebas del backend: `cd backend && npm test` (17/17).
+- Antes de integrar, ejecutar las pruebas del backend: `cd backend && npm test` (18/18).
 
 ## Rama de Nicolas Moreno: `feature/nicolas-productos`
 
@@ -18,11 +18,11 @@ Tarea histórica: filtro y ordenamiento en Productos.
 git switch feature/nicolas-productos
 ```
 
-Puntos de trabajo en la estructura actual:
+Implementado en la estructura actual:
 
-1. Backend: `backend/routes/products.js` y, si aplica, `backend/services/ProductService.js` / `backend/repositories/ProductRepository.js`, para ordenar por precio (`?order=price_asc` / `price_desc`) además de la búsqueda por nombre.
-2. Frontend React: `frontend-react/src/pages/ProductsPage.tsx` y `frontend-react/src/hooks/useProducts.ts` para el selector de orden.
-3. Frontend Vanilla: `frontend-vanilla/js/pages/products.js` si se quiere el mismo control allí.
+1. Backend: `backend/routes/products.js` y `backend/repositories/ProductRepository.js` soportan `?order=price_asc` / `price_desc` junto con la búsqueda por nombre.
+2. Frontend React: `frontend-react/src/pages/ProductsPage.tsx` y `frontend-react/src/hooks/useProducts.ts` incluyen el selector de orden.
+3. Frontend Vanilla: `frontend-vanilla/js/pages/products.js` incluye el mismo control.
 4. Commits sugeridos:
 
 ```bash
@@ -40,9 +40,9 @@ Tarea histórica: validaciones y confirmación en Ventas.
 git switch feature/joan-ventas
 ```
 
-Puntos de trabajo en la estructura actual:
+Implementado en la estructura actual:
 
-1. `frontend-react/src/pages/SalesPage.tsx`: cantidad entera >= 1 y resumen antes de registrar.
+1. `frontend-react/src/pages/SalesPage.tsx`: cantidad entera >= 1, resumen y botón `Confirmar venta` antes de registrar.
 2. `frontend-vanilla/js/pages/sales.js`: misma validación y confirmación.
 3. `backend/routes/sales.js`, `backend/services/SaleService.js` y `backend/services/InventoryService.js`: validación de stock y reversión transaccional.
 4. Commits sugeridos:

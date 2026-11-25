@@ -20,12 +20,12 @@ async function http<T>(method: string, path: string, body?: unknown): Promise<T>
 }
 
 const crud = <T, P = Partial<T>>(name: string, withSearch = false) => ({
-  list: () => http<T[]>('GET', `/${name}`),
+  list: (order?: string) => http<T[]>('GET', `/${name}${order ? `?order=${encodeURIComponent(order)}` : ''}`),
   get: (id: number) => http<T>('GET', `/${name}/${id}`),
   create: (data: P) => http<T>('POST', `/${name}`, data),
   update: (id: number, data: P) => http<T>('PUT', `/${name}/${id}`, data),
   remove: (id: number) => http<{ deleted: boolean; id: number }>('DELETE', `/${name}/${id}`),
-  ...(withSearch ? { search: (q: string) => http<T[]>('GET', `/${name}?search=${encodeURIComponent(q)}`) } : {})
+  ...(withSearch ? { search: (q: string, order?: string) => http<T[]>('GET', `/${name}?search=${encodeURIComponent(q)}${order ? `&order=${encodeURIComponent(order)}` : ''}`) } : {})
 });
 
 export const api = {

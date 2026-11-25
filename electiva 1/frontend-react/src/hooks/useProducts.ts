@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { api } from '../services/api';
 import type { Category, Product, ProductPayload } from '../types';
 
@@ -8,13 +8,13 @@ export function useProducts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const load = useCallback(async (search = '') => {
+  const load = useCallback(async (search = '', order = '') => {
     try {
       setLoading(true);
       setError('');
       const searchProducts = api.products.search;
       const [p, c] = await Promise.all([
-        search && searchProducts ? searchProducts(search) : api.products.list(),
+        search && searchProducts ? searchProducts(search, order) : api.products.list(order),
         api.categories.list()
       ]);
       setProducts(p);
@@ -25,8 +25,6 @@ export function useProducts() {
       setLoading(false);
     }
   }, []);
-
-  useEffect(() => { void load(); }, [load]);
 
   const save = async (payload: ProductPayload, id?: number): Promise<void> => {
     if (id) await api.products.update(id, payload);

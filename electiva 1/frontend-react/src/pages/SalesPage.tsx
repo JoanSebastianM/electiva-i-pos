@@ -6,25 +6,42 @@ import { formatDate, formatMoney } from '../utils/format';
 
 interface Props { isAdmin: boolean }
 
+interface PendingSale {
+  productId: number;
+  quantity: number;
+  total: number;
+  productName: string;
+}
+
 export default function SalesPage({ isAdmin }: Props) {
   const { sales, products, loading, error, create, remove, setError } = useSales();
   const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [msg, setMsg] = useState('');
+  const [pending, setPending] = useState<PendingSale | null>(null);
 
   const selected = useMemo(() => products.find((p) => p.id === Number(productId)), [products, productId]);
   const total = (selected?.price || 0) * quantity;
 
-  const submit = async (e: FormEvent): Promise<void> => {
+  const submit = (e: FormEvent): void => {
     e.preventDefault();
     setError('');
     setMsg('');
-    if (!selected) { setError('Selecciona un producto'); return; }
-    if (!Number.isInteger(quantity) || quantity < 1) { setError('Cantidad invalida'); return; }
-    if (quantity > selected.stock) { setError('Stock insuficiente'); return; }
+    if (!selected) { setPending(null); setError('Selecciona un producto'); return; }
+    if (!Number.isInteger(quantity) || quantity < 1) { setPending(null); setError('Cantidad invalida'); return; }
+    if (quantity > selected.stock) { setPending(null); setError('Stock insuficiente'); return; }
+    setPending({ productId: selected.id, quantity, total, productName: selected.name });
+    setMsg('Revisa la venta antes de confirmarla.');
+  };
+
+  const confirm = async (): Promise<void> => {
+    if (!pending) return;
+    setError('');
+    setMsg('');
     try {
-      await create({ productId: selected.id, quantity });
+      await create({ productId: pending.productId, quantity: pending.quantity });
       setMsg('Venta registrada.');
+      setPending(null);
       setProductId(''); setQuantity(1);
     } catch (e2) {
       setError(e2 instanceof Error ? e2.message : 'Error registrando la venta');
@@ -46,7 +63,17 @@ export default function SalesPage({ isAdmin }: Props) {
             <div>Precio unitario: <strong>{formatMoney(selected?.price || 0)}</strong></div>
             <div>Total: <strong>{formatMoney(total)}</strong></div>
           </div>
-          <StyledButton type="submit" disabled={!selected}>Registrar venta</StyledButton>
+          {pending && (
+            <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-slate-700">
+              <div>Confirmar: <strong>{pending.quantity} x {pending.productName}</strong></div>
+              <div>Total a registrar: <strong>{formatMoney(pending.total)}</strong></div>
+              <div className="mt-2 flex gap-2">
+                <StyledButton type="button" onClick={() => void confirm()}>Confirmar venta</StyledButton>
+                <StyledButton type="button" variant="secondary" onClick={() => setPending(null)}>Cancelar</StyledButton>
+              </div>
+            </div>
+          )}
+          <StyledButton type="submit" disabled={!selected}>Revisar venta</StyledButton>
         </div>
       </form>
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft">

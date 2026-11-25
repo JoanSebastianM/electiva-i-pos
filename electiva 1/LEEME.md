@@ -92,7 +92,7 @@ Scripts raíz disponibles: `install:backend`, `install:react`, `install:all`, `d
 
 ## Verificación
 
-- Backend: `cd backend && npm test` -> **17/17 pass** (verificado).
+- Backend: `cd backend && npm test` -> **18/18 pass** (verificado).
 - React: `npm run typecheck`, `npm run lint`, `npm run build` -> OK (verificado).
 - Base oficial migrada: tabla `Session` e índice `idx_product_ingredient_pair`; se conservaron 1 usuario y 5 productos.
 - **Verificado:** Vanilla y React se probaron simultáneamente en Chrome headless: login admin/cajero, recetas, permisos, visibilidad cruzada de datos y registro de ventas; ver checklist en [README.md](README.md).
@@ -108,3 +108,10 @@ Scripts raíz disponibles: `install:backend`, `install:react`, `install:all`, `d
 - No se permite vender más unidades que el stock disponible.
 - Al registrar una venta se descuentan producto e ingredientes de su receta; si falla algo, la transacción revierte todos los cambios.
 - Al eliminar una venta se restauran el stock del producto y el de sus ingredientes.
+
+## Entrega y seguimiento
+
+- Jira: https://unimayor-team-jwt57jwx.atlassian.net/jira/software/projects/ELEC/summary
+- GitHub: https://github.com/JoanSebastianM/electiva-i-pos
+- Matriz de calificación y evidencia: [CALIFICACION-EVIDENCIA.md](docs/Documentacion/CALIFICACION-EVIDENCIA.md)
+- Estado: 14/14 actividades `Finalizada`; sin pendientes.
