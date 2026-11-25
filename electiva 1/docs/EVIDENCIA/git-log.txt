@@ -1,0 +1,24 @@
+﻿* d248c62 (HEAD -> main, origin/main, origin/HEAD) release(electiva-1): cerrar entrega al 100%
+* 6b227b9 release(electiva-1): publicar versi├│n corregida completa
+*   2b6acd2 Merge pull request #1 from JoanSebastianM/feature/nicolas-productos
+|\  
+* | 89a519f Delete docs/Guia_de_evidencia.docx
+* | 31282ba Delete docs/Guia_de_ejecucion.docx
+* | fa3876c Delete docs/Casos_de_prueba.docx
+* | 2ffc575 Update TEST-CASES.md
+* | 9480171 Update TEST-CASES.md
+| | * a992483 (origin/feature/nicolas-productos) Refactoriza servicios y agrega carrito multiproducto
+| | * 296b9e2 Publica versi├│n final de Embriagados CRUD por capas
+| |/  
+| * c4907ad fix(test): corregir comando de pruebas del backend
+| * 28f7ac8 fix(productos): corregir ordenamiento de la tabla
+| * fe68469 feat(productos): selector de orden y busqueda en la tabla
+| * 759d23b feat(productos): ordenar lista por precio en el backend
+| | * 43d66fa (origin/feature/frontend-conexion) feat(frontend): conectar CRUD de productos al backend
+| | * f460be6 (origin/feature/arquitectura-capas) docs(presentacion): generar presentacion de arquitectura
+| | * 498fe49 docs(arquitectura): documentar capas y actualizar pruebas
+| | * 1bbdd90 refactor(frontend): extraer Navbar, Tabla y Formulario
+| | * e58caad refactor(backend): agregar capas de repositorios y servicios
+| |/  
+|/|   
+* | f42b96b chore: ignorar archivos temporales de Word
