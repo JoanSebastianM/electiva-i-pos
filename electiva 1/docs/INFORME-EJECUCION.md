@@ -4,13 +4,13 @@
 
 ## ETAPA 1 — Análisis
 
-- Se analizó `App/` como versión anterior (Express + SQLite + React JS): endpoints, esquema, lógica de ventas con stock/transacción y ausencia de autenticación, usuarios, inventario dedicado, recetas editables y frontend Vanilla.
+- Se analizó la versión anterior (Express + SQLite + React JS, hoy en respaldo externo): endpoints, esquema, lógica de ventas con stock/transacción y ausencia de autenticación, usuarios, inventario dedicado, recetas editables y frontend Vanilla.
 - Se definió una arquitectura con backend compartido y dos clientes (Vanilla y React) sobre la misma base SQLite.
 
 ## ETAPA 2 — Estructura
 
 - Creados `backend/`, `frontend-vanilla/`, `frontend-react/` y `docs/`, además del `package.json` raíz con los scripts de ejecución.
-- `App/` y el material original (diagrama, documentación .docx y presentación) se conservaron como referencia histórica/legacy, dentro de `docs/` cuando corresponde. La ejecución recomendada usa las carpetas nuevas.
+- El material original (diagrama, documentación .docx y presentación) se conserva como referencia histórica dentro de `docs/` cuando corresponde. La ejecución recomendada usa `backend/`, `frontend-vanilla/` y `frontend-react/`.
 
 ## ETAPA 3 — Backend compartido
 
@@ -50,10 +50,16 @@
 ## ETAPA 8 — Documentación
 
 - Actualizados README raíz, LEEME, documentación en `docs/Documentacion/`, informe y READMEs de ambos frontends para reflejar arquitectura real, auth por sesión, roles, recetas, variables de entorno, puertos, scripts, pruebas y validación visual completada.
-- La documentación final se publicó en GitHub junto con el código; `App/COMO-ABRIR-LA-APP.md` y `App/Abrir-App.bat` permanecen como referencia legacy.
+- La documentación final se publicó en GitHub junto con el código; el material legacy se movió a `Desktop\_backup_legacy_pos_granizados_20261125` y no se usa para la entrega actual.
 
 ## ETAPA 9 — Cierre al 100%
 
 - Se cerraron las dos tareas históricas pendientes: orden por precio en Productos (`?order=price_asc` / `price_desc`) y confirmación del resumen antes de registrar una venta, en backend, React y Vanilla.
 - La suite quedó en **18/18 pass** y React en `typecheck`, `lint` y `build` OK; los 14 módulos JS de Vanilla pasaron `node --check`.
 - Jira quedó con 14 actividades en estado `Finalizada`, seguimiento del equipo, links de Jira/GitHub en comentarios y adjuntos de texto/ZIP. No se generaron capturas ni imágenes nuevas.
+
+## ETAPA 10 — Paquete listo para presentación
+
+- Creado `ABRIR-POS-GRANIZADOS.bat`: instala dependencias si faltan, levanta backend, React y Vanilla, y abre los navegadores.
+- Creado `PRESENTACION.md` con URLs, credenciales, orden de demo y enlaces de seguimiento.
+- La versión anterior, su iniciador y las dependencias sin uso de la raíz se movieron a `Desktop\_backup_legacy_pos_granizados_20261125`; no se eliminó material importante.

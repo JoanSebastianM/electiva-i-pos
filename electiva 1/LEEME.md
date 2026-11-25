@@ -1,6 +1,6 @@
 # Arquitectura con Ginna 1.1
 
-Entrega actual del proyecto **POS Granizados / Embriagados CRUD**. La ejecución oficial usa **backend compartido + dos frontends** sobre la misma base SQLite. `App/` queda conservada como versión histórica/legacy, pero no se recomienda usarla.
+Entrega actual del proyecto **POS Granizados / Embriagados CRUD**. La ejecución oficial usa **backend compartido + dos frontends** sobre la misma base SQLite. Para presentar, haz doble clic en `ABRIR-POS-GRANIZADOS.bat`.
 
 ## Integrantes
 
@@ -17,8 +17,9 @@ arquitectura con ginna 1.1/
 ├── backend/            # Express + SQLite en backend/data/embriagados.db (puerto 3001)
 ├── frontend-vanilla/   # HTML/CSS/JS + Fetch (puerto 5500)
 ├── frontend-react/     # React + TypeScript + Vite + Tailwind (puerto 5173)
-├── docs/               # Diagrama, documentación, presentación e informe
-├── App/                # legacy: backend + frontend anteriores (referencia histórica)
+├── docs/               # Diagrama, documentación, evidencia e informe
+├── ABRIR-POS-GRANIZADOS.bat  # iniciador de la entrega actual
+├── PRESENTACION.md     # guía rápida de demo
 └── package.json        # scripts raíz
 ```
 
@@ -37,18 +38,14 @@ arquitectura con ginna 1.1/
 | `frontend-vanilla/` | Cliente estático en el puerto 5500. |
 | `frontend-react/` | Cliente React + TS + Vite en el puerto 5173. |
 
-### Legacy
+### Material histórico
 
-| Ruta | Descripción |
-| --- | --- |
-| `App/Abrir-App.bat` | Iniciador de la versión anterior. |
-| `App/COMO-ABRIR-LA-APP.md` | Guía histórica de requisitos y solución de problemas. |
-| `App/backend/` | API anterior. |
-| `App/frontend/` | Frontend React anterior. |
+La versión anterior y su iniciador se movieron a `Desktop\_backup_legacy_pos_granizados_20261125`; no se usan para la presentación.
 
 ### Documentación y material
 
 - `docs/Diagrama/diagrama-arquitectura.svg` y `.pdf`
+- `PRESENTACION.md`: guía rápida de demo
 - `docs/Documentacion/README.md`, `ARQUITECTURA.md`, `CONTRIBUCION-GIT.md`, `TEST-CASES.md`
 - `docs/Documentacion/*.docx`: documentos originales de la entrega
 - `docs/Presentacion/Arquitectura-Embriagados.pptx` y `.pdf`
@@ -56,7 +53,9 @@ arquitectura con ginna 1.1/
 
 ## Cómo ejecutar (recomendado)
 
-Requiere Node.js 20+ y npm. Desde la raíz:
+Requiere Node.js 20+ y npm. Forma recomendada: doble clic en `ABRIR-POS-GRANIZADOS.bat` desde la raíz. El iniciador instala lo que falte, levanta los tres servicios y abre los navegadores.
+
+Forma manual:
 
 ```powershell
 npm run install:all

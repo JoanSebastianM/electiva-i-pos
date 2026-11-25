@@ -1,6 +1,6 @@
 # POS Granizados
 
-Proyecto reorganizado con **backend Express + SQLite compartido**, **frontend Vanilla** y **frontend React** consumiendo la misma API y la misma base de datos. La carpeta `App/` es la versión histórica/legacy: se conserva como referencia, pero **no es la forma recomendada de ejecutar el proyecto**.
+Proyecto reorganizado con **backend Express + SQLite compartido**, **frontend Vanilla** y **frontend React** consumiendo la misma API y la misma base de datos. Para presentar, haz doble clic en `ABRIR-POS-GRANIZADOS.bat` desde la raíz.
 
 ## Integrantes
 
@@ -17,8 +17,9 @@ arquitectura con ginna 1.1/
 ├── backend/            # API Express + SQLite compartida
 ├── frontend-vanilla/   # HTML + CSS + JS + Fetch (puerto 5500)
 ├── frontend-react/     # React + TypeScript + Vite + Tailwind (puerto 5173)
-├── docs/               # Diagrama, documentación, presentación e informe
-├── App/                # versión histórica/legacy (conservada, no recomendada)
+├── docs/               # Diagrama, documentación, evidencia e informe
+├── ABRIR-POS-GRANIZADOS.bat  # iniciador de la entrega actual
+├── PRESENTACION.md     # guía rápida de demo
 ├── package.json        # scripts raíz
 └── README.md
 ```
@@ -109,7 +110,9 @@ En producción, `SEED_ADMIN_USERNAME` y `SEED_ADMIN_PASSWORD` son obligatorios p
 
 ## Instalación y ejecución
 
-Desde la raíz, en PowerShell:
+Forma recomendada: desde la raíz, haz doble clic en `ABRIR-POS-GRANIZADOS.bat`. El iniciador instala lo que falte, levanta backend, React y Vanilla, y abre `http://localhost:5173` y `http://localhost:5500`.
+
+Forma manual, desde la raíz en PowerShell:
 
 ```powershell
 npm run install:all
@@ -172,6 +175,7 @@ La base oficial `backend/data/embriagados.db` fue migrada para crear la tabla `S
 ## Documentación
 
 - Guía corta: [LEEME.md](LEEME.md)
+- Guía de presentación: [PRESENTACION.md](PRESENTACION.md)
 - Documentación: [docs/Documentacion/README.md](docs/Documentacion/README.md)
 - Arquitectura: [docs/Documentacion/ARQUITECTURA.md](docs/Documentacion/ARQUITECTURA.md)
 - Git: [docs/Documentacion/CONTRIBUCION-GIT.md](docs/Documentacion/CONTRIBUCION-GIT.md)

@@ -1,6 +1,6 @@
 # POS Granizados / EMBRIAGADOS CRUD — Documentación
 
-Sistema web de gestión para un negocio de granizados y complementos. La versión oficial tiene **un backend Express + SQLite compartido** y **dos frontends** (Vanilla y React) que consumen la misma API y la misma base de datos. `App/` es la versión histórica/legacy, conservada pero no recomendada.
+Sistema web de gestión para un negocio de granizados y complementos. La versión oficial tiene **un backend Express + SQLite compartido** y **dos frontends** (Vanilla y React) que consumen la misma API y la misma base de datos. Para presentar, usa `ABRIR-POS-GRANIZADOS.bat` desde la raíz.
 
 ## Arquitectura general
 
@@ -58,7 +58,8 @@ arquitectura con ginna 1.1/
 ├── frontend-vanilla/      # index.html, css/, js/ (api/client.js, pages/)
 ├── frontend-react/        # src/ (services/api.ts, hooks/, pages/, components/)
 ├── docs/                  # Diagrama, Documentacion, Presentacion, INFORME-EJECUCION.md
-├── App/                   # legacy, no recomendado
+├── ABRIR-POS-GRANIZADOS.bat
+├── PRESENTACION.md
 └── package.json
 ```
 

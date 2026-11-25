@@ -1,6 +1,6 @@
 # Arquitectura por capas — POS Granizados / EMBRIAGADOS CRUD
 
-Este documento describe la arquitectura implementada en la versión oficial del proyecto y su relación con el diagrama original. La ejecución usa `backend/` y los frontends `frontend-vanilla/` y `frontend-react/`. `App/` es la versión histórica/legacy, conservada pero no recomendada.
+Este documento describe la arquitectura implementada en la versión oficial del proyecto y su relación con el diagrama original. La ejecución usa `backend/` y los frontends `frontend-vanilla/` y `frontend-react/`. El iniciador de la entrega actual es `ABRIR-POS-GRANIZADOS.bat`.
 
 ![Diagrama de arquitectura por capas](../Diagrama/diagrama-arquitectura.svg)
 

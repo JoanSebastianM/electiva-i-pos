@@ -1,14 +1,17 @@
-﻿OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\main.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\api\client.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\categories.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\customers.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\dashboard.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\ingredients.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\inventory.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\login.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\products.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\recipes.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\sales.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\pages\users.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\utils\dom.js
-OK C:\Users\ACER NITRO 5\Desktop\arquitectura con ginna 1.1\frontend-vanilla\js\utils\format.js
+﻿Vanilla syntax - 2026-11-25T09:08:39.6169048-05:00
+Archivos JS: 14
+OK .\frontend-vanilla\js\main.js
+OK .\frontend-vanilla\js\api\client.js
+OK .\frontend-vanilla\js\pages\categories.js
+OK .\frontend-vanilla\js\pages\customers.js
+OK .\frontend-vanilla\js\pages\dashboard.js
+OK .\frontend-vanilla\js\pages\ingredients.js
+OK .\frontend-vanilla\js\pages\inventory.js
+OK .\frontend-vanilla\js\pages\login.js
+OK .\frontend-vanilla\js\pages\products.js
+OK .\frontend-vanilla\js\pages\recipes.js
+OK .\frontend-vanilla\js\pages\sales.js
+OK .\frontend-vanilla\js\pages\users.js
+OK .\frontend-vanilla\js\utils\dom.js
+OK .\frontend-vanilla\js\utils\format.js
+OK 14 modulos

@@ -13,8 +13,5 @@
     "dev:react": "npm --prefix frontend-react run dev",
     "build:react": "npm --prefix frontend-react run build",
     "test:backend": "npm --prefix backend test"
-  },
-  "dependencies": {
-    "ws": "^8.23.0"
   }
 }

@@ -1,6 +1,6 @@
 # Guía de Git y tareas por integrante
 
-El proyecto tiene una base funcional en `main` con backend compartido y dos frontends. Cada integrante trabajó en su propia rama con sus propios commits y la integración final se hizo en `main`. Esta guía refleja la estructura actual: `backend/`, `frontend-vanilla/` y `frontend-react/`. La carpeta `App/` es legacy y no debe usarse como base de trabajo nuevo.
+El proyecto tiene una base funcional en `main` con backend compartido y dos frontends. Cada integrante trabajó en su propia rama con sus propios commits y la integración final se hizo en `main`. Esta guía refleja la estructura actual: `backend/`, `frontend-vanilla/` y `frontend-react/`. El punto de partida para presentar es `ABRIR-POS-GRANIZADOS.bat`.
 
 ## Reglas importantes
 

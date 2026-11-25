@@ -4,7 +4,8 @@
 
 - Jira: https://unimayor-team-jwt57jwx.atlassian.net/jira/software/projects/ELEC/summary
 - GitHub: https://github.com/JoanSebastianM/electiva-i-pos
-- ZIP final: `electiva 1.0-final.zip`, adjunto en `ELEC-1`.
+- ZIP de presentación: `electiva 1.0-presentacion.zip`, adjunto en `ELEC-1`.
+- ZIP anterior: `electiva 1.0-final.zip`, conservado solo como historial en Jira.
 
 ## Matriz requisito → evidencia
 
@@ -14,6 +15,7 @@
 | 3. Repositorio GitHub con carpeta `frontend-react`; pegar link de GitHub en comentarios de la actividad | `electiva 1/frontend-react`, 34 archivos en `src`, historial de commits y ramas | Comentarios de `ELEC-1` a `ELEC-14` con link exacto del repo | https://github.com/JoanSebastianM/electiva-i-pos | 100% |
 | 4. Desarrollar parte del frontend en React usando todo lo visto en el corte | Componentes, props, hooks, Router, fetch, TypeScript, Tailwind, roles y formularios | `ELEC-9`; detalle en `ELEC-13` | `electiva 1/frontend-react/src/` | 100% |
 | Nota: registrar avances en Jira y cambios en GitHub | Issues/estados/comentarios e historial de commits por rama | 14/14 `Finalizada` | `git log --oneline --graph --all` | 100% |
+| Paquete listo para presentación | `ABRIR-POS-GRANIZADOS.bat`, `PRESENTACION.md`, carpeta sin legacy y ZIP de presentación | `ELEC-1` con ZIP y comentario de cierre | Commits finales en `main` | 100% |
 | Cierre de tareas históricas pendientes | Orden por precio y confirmación de venta en backend, React y Vanilla | `ELEC-3`, `ELEC-4`, `ELEC-14` | Commits finales en `main` | 100% |
 
 ## Cobertura React documentada
